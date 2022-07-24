@@ -8,6 +8,7 @@
 
 #include <linux/pm_qos.h>
 #include <linux/platform_data/dma-imx.h>
+#include <linux/clk-provider.h>
 #include <sound/dmaengine_pcm.h>
 
 #define FAL_SAI_NUM_RATES  20
@@ -270,6 +271,11 @@ struct fsl_sai_dl_cfg {
 	unsigned int next_off[2];
 };
 
+struct fsl_sai_mclk {
+	struct clk_hw mclk;
+	unsigned int idx;
+};
+
 struct fsl_sai {
 	struct platform_device *pdev;
 	struct regmap *regmap;
@@ -279,6 +285,7 @@ struct fsl_sai {
 	struct clk *pll8k_clk;
 	struct clk *pll11k_clk;
 	struct resource *res;
+	struct fsl_sai_mclk mclk[FSL_SAI_MCLK_MAX];
 
 	bool slave_mode[2];
 	bool is_lsb_first;

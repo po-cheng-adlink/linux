@@ -1287,6 +1287,106 @@ static int fsl_sai_read_dlcfg(struct platform_device *pdev, char *pn,
 	return num_cfg;
 }
 
+static int sai_mclk_prepare(struct clk_hw *hw)
+{
+	struct fsl_sai_mclk *mclk = container_of(hw, struct fsl_sai_mclk, mclk);
+	struct fsl_sai *sai = container_of(mclk, struct fsl_sai, mclk[mclk->idx]);
+	int rc;
+
+	rc = pm_runtime_get_sync(&sai->pdev->dev);
+	if (rc < 0)
+		return rc;
+
+	rc = clk_prepare(sai->mclk_clk[mclk->idx]);
+	if (rc < 0)
+		pm_runtime_put(&sai->pdev->dev);
+
+	return rc;
+}
+
+static int sai_mclk_enable(struct clk_hw *hw)
+{
+	struct fsl_sai_mclk *mclk = container_of(hw, struct fsl_sai_mclk, mclk);
+	struct fsl_sai *sai = container_of(mclk, struct fsl_sai, mclk[mclk->idx]);
+
+	return clk_enable(sai->mclk_clk[mclk->idx]);
+}
+
+static void sai_mclk_disable(struct clk_hw *hw)
+{
+	struct fsl_sai_mclk *mclk = container_of(hw, struct fsl_sai_mclk, mclk);
+	struct fsl_sai *sai = container_of(mclk, struct fsl_sai, mclk[mclk->idx]);
+
+	clk_disable(sai->mclk_clk[mclk->idx]);
+}
+
+static void sai_mclk_unprepare(struct clk_hw *hw)
+{
+	struct fsl_sai_mclk *mclk = container_of(hw, struct fsl_sai_mclk, mclk);
+	struct fsl_sai *sai = container_of(mclk, struct fsl_sai, mclk[mclk->idx]);
+
+	clk_unprepare(sai->mclk_clk[mclk->idx]);
+	pm_runtime_put(&sai->pdev->dev);
+}
+
+static struct clk_ops const sai_mclk_ops = {
+	.prepare	= sai_mclk_prepare,
+	.enable		= sai_mclk_enable,
+	.disable	= sai_mclk_disable,
+	.unprepare	= sai_mclk_unprepare,
+};
+
+static struct clk_hw *sai_mclk_get(struct of_phandle_args *clkspec, void *sai_)
+{
+	struct fsl_sai *sai = sai_;
+
+	if (clkspec->args_count != 1)
+		return ERR_PTR(-EINVAL);
+
+	if (clkspec->args[0] >= ARRAY_SIZE(sai->mclk))
+		return ERR_PTR(-EINVAL);
+
+	return &sai->mclk[clkspec->args[0]].mclk;
+}
+
+static int fsl_sai_init_mclk(struct fsl_sai *sai)
+{
+	size_t i;
+	int rc;
+
+	for (i = 0; i < ARRAY_SIZE(sai->mclk); ++i) {
+		char name[sizeof("sai@xxxxxxxxx_mclkX_out") + 2 * 9];
+
+		snprintf(name, sizeof name, "%s_mclk%zd_out",
+			 sai->pdev->dev.of_node->full_name, i);
+
+		sai->mclk[i] = (struct fsl_sai_mclk) {
+			.idx	= i,
+			.mclk	= {
+				.init	= CLK_HW_INIT_HW(name,
+							 __clk_get_hw(sai->mclk_clk[i]),
+							 &sai_mclk_ops,
+							 0),
+			}
+		};
+
+		rc = devm_clk_hw_register(&sai->pdev->dev, &sai->mclk[i].mclk);
+		if (rc < 0) {
+			dev_err(&sai->pdev->dev, "failed to register mclk %s: %d\n",
+				name, rc);
+			break;
+		}
+	}
+
+	if (rc < 0)
+		goto out;
+
+	rc = devm_of_clk_add_hw_provider(&sai->pdev->dev, sai_mclk_get, sai);
+
+out:
+	return rc;
+}
+
 static int fsl_sai_probe(struct platform_device *pdev)
 {
 	struct device_node *np = pdev->dev.of_node;
@@ -1479,6 +1579,10 @@ static int fsl_sai_probe(struct platform_device *pdev)
 	    sai->soc_data->max_register >= FSL_SAI_MCTL) {
 		regmap_update_bits(sai->regmap, FSL_SAI_MCTL,
 				   FSL_SAI_MCTL_MCLK_EN, FSL_SAI_MCTL_MCLK_EN);
+
+		ret = fsl_sai_init_mclk(sai);
+		if (ret < 0)
+			goto err_pm_get_sync;
 	}
 
 	ret = pm_runtime_put_sync(&pdev->dev);
