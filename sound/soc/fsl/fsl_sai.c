@@ -1309,6 +1309,12 @@ static int sai_mclk_enable(struct clk_hw *hw)
 	struct fsl_sai_mclk *mclk = container_of(hw, struct fsl_sai_mclk, mclk);
 	struct fsl_sai *sai = container_of(mclk, struct fsl_sai, mclk[mclk->idx]);
 
+	regmap_update_bits(sai->regmap, FSL_SAI_MCTL,
+			   FSL_SAI_MCTL_MCLK_EN, FSL_SAI_MCTL_MCLK_EN);
+
+	regmap_update_bits(sai->regmap, FSL_SAI_TCSR(sai->soc_data->reg_offset),
+			   FSL_SAI_CSR_TERE, FSL_SAI_CSR_TERE);
+
 	return clk_enable(sai->mclk_clk[mclk->idx]);
 }
 
