@@ -778,7 +778,13 @@ static const struct snd_kcontrol_new sgtl5000_snd_controls[] = {
 static int sgtl5000_mute_stream(struct snd_soc_dai *codec_dai, int mute, int direction)
 {
 	struct snd_soc_component *component = codec_dai->component;
+	struct sgtl5000_priv *sgtl5000 = snd_soc_component_get_drvdata(component);
 	u16 i2s_pwr = SGTL5000_I2S_IN_POWERUP;
+	int ret;
+
+	ret = clk_prepare_enable(sgtl5000->mclk);
+	if (ret)
+		return ret;
 
 	/*
 	 * During 'digital mute' do not mute DAC
@@ -787,6 +793,8 @@ static int sgtl5000_mute_stream(struct snd_soc_dai *codec_dai, int mute, int dir
 	 */
 	snd_soc_component_update_bits(component, SGTL5000_CHIP_DIG_POWER,
 			i2s_pwr, mute ? 0 : i2s_pwr);
+
+	clk_disable_unprepare(sgtl5000->mclk);
 
 	return 0;
 }
@@ -853,7 +861,9 @@ static int sgtl5000_set_dai_fmt(struct snd_soc_dai *codec_dai, unsigned int fmt)
 		return -EINVAL;
 	}
 
+	clk_prepare_enable(sgtl5000->mclk);
 	snd_soc_component_write(component, SGTL5000_CHIP_I2S_CTRL, i2sctl);
+	clk_disable_unprepare(sgtl5000->mclk);
 
 	return 0;
 }
@@ -1055,10 +1065,15 @@ static int sgtl5000_pcm_hw_params(struct snd_pcm_substream *substream,
 	int stereo;
 	int ret;
 
+	ret = clk_prepare_enable(sgtl5000->mclk);
+	if (ret)
+		return ret;
+
 	/* sysclk should already set */
 	if (!sgtl5000->sysclk) {
 		dev_err(component->dev, "%s: set sysclk first!\n", __func__);
-		return -EFAULT;
+		ret = -EFAULT;
+		goto out;
 	}
 
 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
@@ -1073,13 +1088,15 @@ static int sgtl5000_pcm_hw_params(struct snd_pcm_substream *substream,
 	/* set codec clock base on lrclk */
 	ret = sgtl5000_set_clock(component, params_rate(params));
 	if (ret)
-		return ret;
+		goto out;
 
 	/* set i2s data format */
 	switch (params_width(params)) {
 	case 16:
-		if (sgtl5000->fmt == SND_SOC_DAIFMT_RIGHT_J)
-			return -EINVAL;
+		if (sgtl5000->fmt == SND_SOC_DAIFMT_RIGHT_J) {
+			ret = -EINVAL;
+			goto out;
+		}
 		i2s_ctl |= SGTL5000_I2S_DLEN_16 << SGTL5000_I2S_DLEN_SHIFT;
 		i2s_ctl |= SGTL5000_I2S_SCLKFREQ_32FS <<
 		    SGTL5000_I2S_SCLKFREQ_SHIFT;
@@ -1095,21 +1112,28 @@ static int sgtl5000_pcm_hw_params(struct snd_pcm_substream *substream,
 		    SGTL5000_I2S_SCLKFREQ_SHIFT;
 		break;
 	case 32:
-		if (sgtl5000->fmt == SND_SOC_DAIFMT_RIGHT_J)
-			return -EINVAL;
+		if (sgtl5000->fmt == SND_SOC_DAIFMT_RIGHT_J) {
+			ret = -EINVAL;
+			goto out;
+		}
 		i2s_ctl |= SGTL5000_I2S_DLEN_32 << SGTL5000_I2S_DLEN_SHIFT;
 		i2s_ctl |= SGTL5000_I2S_SCLKFREQ_64FS <<
 		    SGTL5000_I2S_SCLKFREQ_SHIFT;
 		break;
 	default:
-		return -EINVAL;
+		ret = -EINVAL;
+		goto out;
 	}
 
 	snd_soc_component_update_bits(component, SGTL5000_CHIP_I2S_CTRL,
 			    SGTL5000_I2S_DLEN_MASK | SGTL5000_I2S_SCLKFREQ_MASK,
 			    i2s_ctl);
 
-	return 0;
+	ret = 0;
+
+out:
+	clk_disable_unprepare(sgtl5000->mclk);
+	return ret;
 }
 
 /*
@@ -1128,6 +1152,10 @@ static int sgtl5000_set_bias_level(struct snd_soc_component *component,
 	struct sgtl5000_priv *sgtl = snd_soc_component_get_drvdata(component);
 	int ret;
 
+	ret = clk_prepare_enable(sgtl->mclk);
+	if (ret)
+		return ret;
+
 	switch (level) {
 	case SND_SOC_BIAS_ON:
 	case SND_SOC_BIAS_PREPARE:
@@ -1136,7 +1164,7 @@ static int sgtl5000_set_bias_level(struct snd_soc_component *component,
 		ret = regcache_sync(sgtl->regmap);
 		if (ret) {
 			regcache_cache_only(sgtl->regmap, true);
-			return ret;
+			goto out;
 		}
 
 		snd_soc_component_update_bits(component, SGTL5000_CHIP_ANA_POWER,
@@ -1150,6 +1178,10 @@ static int sgtl5000_set_bias_level(struct snd_soc_component *component,
 		break;
 	}
 
+	ret = 0;
+
+out:
+	clk_disable_unprepare(sgtl->mclk);
 	return 0;
 }
 
@@ -1466,6 +1498,10 @@ static int sgtl5000_probe(struct snd_soc_component *component)
 	struct sgtl5000_priv *sgtl5000 = snd_soc_component_get_drvdata(component);
 	unsigned int zcd_mask = SGTL5000_HP_ZCD_EN | SGTL5000_ADC_ZCD_EN;
 
+	ret = clk_prepare_enable(sgtl5000->mclk);
+	if (ret)
+		return ret;
+
 	/* power up sgtl5000 */
 	ret = sgtl5000_set_power_regs(component);
 	if (ret)
@@ -1513,9 +1549,10 @@ static int sgtl5000_probe(struct snd_soc_component *component)
 	snd_soc_component_update_bits(component, SGTL5000_CHIP_ADCDAC_CTRL,
 		SGTL5000_DAC_MUTE_LEFT | SGTL5000_DAC_MUTE_RIGHT, 0);
 
-	return 0;
+	ret = 0;
 
 err:
+	clk_disable_unprepare(sgtl5000->mclk);
 	return ret;
 }
 
@@ -1524,6 +1561,39 @@ static int sgtl5000_of_xlate_dai_id(struct snd_soc_component *component,
 {
 	/* return dai id 0, whatever the endpoint index */
 	return 0;
+}
+
+static int sgtl5000_soc_write(struct snd_soc_component *component,
+			      unsigned int reg, unsigned int val)
+{
+	struct sgtl5000_priv *sgtl5000 = snd_soc_component_get_drvdata(component);
+	int ret;
+
+	ret = clk_prepare_enable(sgtl5000->mclk);
+	if (ret)
+		return ret;
+
+	ret = regmap_write(sgtl5000->regmap, reg, val);
+	clk_disable_unprepare(sgtl5000->mclk);
+
+	return ret;
+}
+
+static unsigned int sgtl5000_soc_read(struct snd_soc_component *component,
+				      unsigned int reg)
+{
+	struct sgtl5000_priv *sgtl5000 = snd_soc_component_get_drvdata(component);
+	int ret;
+	unsigned int val;
+
+	ret = clk_prepare_enable(sgtl5000->mclk);
+	if (ret)
+		return ret;
+
+	ret = regmap_read(sgtl5000->regmap, reg, &val);
+	clk_disable_unprepare(sgtl5000->mclk);
+
+	return ret < 0 ? 0 : val;
 }
 
 static const struct snd_soc_component_driver sgtl5000_driver = {
@@ -1536,6 +1606,8 @@ static const struct snd_soc_component_driver sgtl5000_driver = {
 	.dapm_routes		= sgtl5000_dapm_routes,
 	.num_dapm_routes	= ARRAY_SIZE(sgtl5000_dapm_routes),
 	.of_xlate_dai_id	= sgtl5000_of_xlate_dai_id,
+	.write			= sgtl5000_soc_write,
+	.read			= sgtl5000_soc_read,
 	.suspend_bias_off	= 1,
 	.idle_bias_on		= 1,
 	.use_pmdown_time	= 1,
@@ -1785,6 +1857,8 @@ static int sgtl5000_i2c_probe(struct i2c_client *client,
 	if (ret)
 		goto disable_clk;
 
+	clk_disable_unprepare(sgtl5000->mclk);
+
 	return 0;
 
 disable_clk:
@@ -1801,19 +1875,11 @@ static int sgtl5000_i2c_remove(struct i2c_client *client)
 {
 	struct sgtl5000_priv *sgtl5000 = i2c_get_clientdata(client);
 
-	regmap_write(sgtl5000->regmap, SGTL5000_CHIP_DIG_POWER, SGTL5000_DIG_POWER_DEFAULT);
-	regmap_write(sgtl5000->regmap, SGTL5000_CHIP_ANA_POWER, SGTL5000_ANA_POWER_DEFAULT);
-
-	clk_disable_unprepare(sgtl5000->mclk);
+//	clk_disable_unprepare(sgtl5000->mclk);
 	regulator_bulk_disable(sgtl5000->num_supplies, sgtl5000->supplies);
 	regulator_bulk_free(sgtl5000->num_supplies, sgtl5000->supplies);
 
 	return 0;
-}
-
-static void sgtl5000_i2c_shutdown(struct i2c_client *client)
-{
-	sgtl5000_i2c_remove(client);
 }
 
 static const struct i2c_device_id sgtl5000_id[] = {
@@ -1836,7 +1902,6 @@ static struct i2c_driver sgtl5000_i2c_driver = {
 	},
 	.probe = sgtl5000_i2c_probe,
 	.remove = sgtl5000_i2c_remove,
-	.shutdown = sgtl5000_i2c_shutdown,
 	.id_table = sgtl5000_id,
 };
 
