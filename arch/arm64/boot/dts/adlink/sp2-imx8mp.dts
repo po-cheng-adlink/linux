@@ -29,21 +29,6 @@
 		};
 	};
 
-	gpio_switch:gpio_switch{
-			compatible = "mxa,gpio-switch";
-			usb-hub-enable;
-			usb-mux-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-			hub-reset-gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-			hwid1-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
-			hwid2-gpios = <&gpio4 31 GPIO_ACTIVE_LOW>;
-			hwid3-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
-			com1-mode0-gpios = <&gpio5 3 GPIO_ACTIVE_HIGH>;
-			com1-mode1-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
-			com2-mode0-gpios = <&gpio3 23 GPIO_ACTIVE_HIGH>;
-			com2-mode1-gpios = <&gpio3 24 GPIO_ACTIVE_LOW>;
-			status = "okay";
-	};
-
 	memory@40000000 {
 		device_type = "memory";
 		reg = <0x0 0x40000000 0 0xc0000000>,
@@ -81,6 +66,21 @@
 				<96000>,
 				<192000>;
 		status = "okay";
+	};
+
+	gpio_switch:gpio_switch {
+			compatible = "mxa,gpio-switch";
+			usb-hub-enable;
+			usb-mux-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
+			hub-reset-gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+			hwid1-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
+			hwid2-gpios = <&gpio4 31 GPIO_ACTIVE_LOW>;
+			hwid3-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
+			com1-mode0-gpios = <&gpio5 3 GPIO_ACTIVE_HIGH>;
+			com1-mode1-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
+			com2-mode0-gpios = <&gpio3 23 GPIO_ACTIVE_HIGH>;
+			com2-mode1-gpios = <&gpio3 24 GPIO_ACTIVE_LOW>;
+			status = "okay";
 	};
 };
 
