@@ -324,6 +324,12 @@
         interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
 	};
 
+	/* PCIe CLK GEN: PI6CG33202C-ZDIEX */
+	/* pcieclk0: pi6cg33202@6a {
+		reg = <0x6a>;
+		compatible = "pi,6cg33202";
+	}; */
+
 };
 
 &i2c3 {
@@ -348,6 +354,7 @@
     };
 
 };
+
 
 &irqsteer_hdmi {
 	status = "okay";
