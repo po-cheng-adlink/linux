@@ -350,11 +350,37 @@
         /* MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06 (TPM_RST#) */
         tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
         reset-assert-us = <200000>;
-	status = "okay";
+        status = "okay";
     };
-
 };
 
+&i2c6 {
+    /* SX1509 */
+    gpio6: i2c6_gpioext0@3f {
+        /* GPIO Expander 0 Mapping :
+         * - 0: CN_DI0
+         * - 1: CN_DI1
+         * - 2: CN_DI2
+         * - 3: CN_DI3
+         * - 4: CN_DO0
+         * - 5: CN_DO1
+         * - 6: CN_DO2
+         * - 7: CN_DO3
+         * - 8~15: N/A
+         */
+        #gpio-cells = <2>;
+        #interrupt-cells = <2>;
+        compatible = "semtech,sx1509q";
+        reg = <0x3f>;
+
+        semtech,probe-reset;
+        gpio-controller;
+        interrupt-controller;
+
+        interrupt-parent = <&gpio1>;
+        interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
+    };
+};
 
 &irqsteer_hdmi {
 	status = "okay";
