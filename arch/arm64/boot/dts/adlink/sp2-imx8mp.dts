@@ -123,6 +123,12 @@
 	status = "okay";
 };
 
+&pwm2 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_pwm2>;
+	status = "okay";
+};
+
 &eqos {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_eqos>;
@@ -637,13 +643,19 @@
 	        MX8MP_IOMUXC_SPDIF_TX__GPIO5_IO03          0x00000106	//GPIO_COM1_MODE0
 		>;
 	};
-	
+
+    pinctrl_pwm2: pwm2grp {
+        fsl,pins = <
+            MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT	0x116
+        >;
+    };
+
     pinctrl_tpm: tpmgrp {
-	    fsl,pins = <
-                MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11           0x156
-           	MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06        0x156	//TPM reset
-            >;
-	};
+        fsl,pins = <
+            MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11        0x156
+            MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06        0x156	//TPM reset
+        >;
+    };
 
 	pinctrl_eqos: eqosgrp {
 		fsl,pins = <
