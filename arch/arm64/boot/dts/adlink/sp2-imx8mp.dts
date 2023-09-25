@@ -42,6 +42,42 @@
 		clock-frequency = <25000000>;
 	};
 
+	reg_bl_en: regulator-bl-en {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_bl_en>;
+		regulator-name = "bl-en";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		gpio = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+	};
+
+	reg_bl_pwr: regulator-bl-pwr {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_bl_pwr>;
+		regulator-name = "bl-pwr";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		gpio = <&gpio3 20 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+	};
+
+	reg_lvds_vdd_en: regulator-lvds-vdd-en {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_lvds_vdd_en>;
+		regulator-name = "lvds-vdd-en";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		gpio = <&gpio4 27 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+	};
+
 	reg_usb0_pwr_en: regulator-usb0pwren {
 		compatible = "regulator-fixed";
 		pinctrl-names = "default";
@@ -51,6 +87,7 @@
 		regulator-max-microvolt = <1800000>;
 		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
+		regulator-always-on;
 	};
 
 	reg_usdhc2_vmmc: regulator-usdhc2 {
@@ -81,7 +118,7 @@
 
 	lvds_backlight: lvds_backlight {
 		compatible = "pwm-backlight";
-		pwms = <&pwm2 0 100000>;
+		pwms = <&pwm2 0 100000 0>;
 		status = "okay";
 
 		brightness-levels = < 0  1  2  3  4  5  6  7  8  9
@@ -136,7 +173,7 @@
 
 &pwm2 {
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_pwm2>;
+	pinctrl-0 = <&pinctrl_bl_pwm2>;
 	status = "okay";
 };
 
@@ -438,15 +475,6 @@
 &hdmiphy {
 	status = "okay";
 };
-#if 0
-&lcdif1 {
-	status = "okay";
-};
-
-&lcdif2 {
-	status = "okay";
-};
-#endif
 
 &lcdif3 {
 	status = "okay";
@@ -464,7 +492,7 @@
 	status = "okay";
 };
 
-&pcie{
+&pcie {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_pcie>;
 	disable-gpio = <&gpio2 6 GPIO_ACTIVE_LOW>;
@@ -491,7 +519,7 @@
 	};
 };
 
-&pcie_ep{
+&pcie_ep {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_pcie>;
 	ext_osc = <1>;
@@ -508,7 +536,7 @@
 	status = "disabled";
 };
 
-&pcie_phy{
+&pcie_phy {
 	ext_osc = <1>;
 	status = "okay";
 };
@@ -656,7 +684,7 @@
 		>;
 	};
 
-	pinctrl_pwm2: pwm2grp {
+	pinctrl_bl_pwm2: blpwm2grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT	0x116
 		>;
@@ -760,6 +788,24 @@
 	pinctrl_pmic: pmicgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO03__GPIO1_IO03	0x000001c0
+		>;
+	};
+
+	pinctrl_reg_bl_en: regblengrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO00__GPIO1_IO00	0x16
+		>;
+	};
+
+	pinctrl_reg_bl_pwr: regblpwrgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SAI5_RXC__GPIO3_IO20	0x16
+		>;
+	};
+
+	pinctrl_reg_lvds_vdd_en: reglvdsvddengrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SAI2_MCLK__GPIO4_IO27	0x16
 		>;
 	};
 
