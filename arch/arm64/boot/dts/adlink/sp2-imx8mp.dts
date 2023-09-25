@@ -363,20 +363,21 @@
 	pinctrl-0 = <&pinctrl_i2c3>;
 	status = "okay";
 
-    /* TPM: ST33HTPH2X32AHD5 */
-    tpm: st33htph77@2e {
-        reg = <0x2e>;
-        compatible = "st,st33htpm-i2c";
-        pinctrl-names = "default";
-        pinctrl-0 = <&pinctrl_tpm>;
-        /* MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11 (TPM_INT_N) */
-        interrupt-parent = <&gpio1>;
-        interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
-        /* MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06 (TPM_RST#) */
-        tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
-        reset-assert-us = <200000>;
-        status = "okay";
-    };
+	/* TPM: ST33HTPH2X32AHD5 */
+	tpm: st33htph77@2e {
+		#gpio-cells = <2>;
+		#interrupt-cells = <2>;
+		compatible = "st,st33htpm-i2c";
+		reg = <0x2e>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_tpm_irq &pinctrl_tpm_rst>;
+		interrupt-parent = <&gpio1>;
+		interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
+		tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
+		reset-assert-us = <200000>;
+		status = "okay";
+	};
 };
 
 &i2c6 {
@@ -628,7 +629,7 @@
 			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC		0x40000019
 	        MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07        0x00000106   //FUNCTION_INT
 	        MX8MP_IOMUXC_SAI3_RXD__GPIO4_IO30        0x00000104   //WWAN_RESET
-	        MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14        0x00000104   //M.2 B-key Reset
+
             MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12        0x00000106   //HUB_RESET
             MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15        0x00000104   //USER LED
             MX8MP_IOMUXC_SAI3_TXC__GPIO5_IO00          0x00000106   //HWID_3
@@ -644,18 +645,23 @@
 		>;
 	};
 
-    pinctrl_pwm2: pwm2grp {
-        fsl,pins = <
-            MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT	0x116
-        >;
-    };
+	pinctrl_pwm2: pwm2grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT	0x116
+		>;
+	};
 
-    pinctrl_tpm: tpmgrp {
-        fsl,pins = <
-            MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11        0x156
-            MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06        0x156	//TPM reset
-        >;
-    };
+	pinctrl_tpm_irq: tpmirqgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_NAND_DQS__GPIO3_IO14		0xd6	// TPM IRQ
+		>;
+	};
+
+	pinctrl_tpm_rst: tpmrstgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO06__GPIO1_IO06		0x156	// TPM reset
+		>;
+	};
 
 	pinctrl_eqos: eqosgrp {
 		fsl,pins = <
