@@ -429,30 +429,36 @@
 };
 
 &i2c6 {
-    /* SX1509 */
-    gpio6: i2c6_gpioext0@3f {
-        /* GPIO Expander 0 Mapping :
-         * - 0: CN_DI0
-         * - 1: CN_DI1
-         * - 2: CN_DI2
-         * - 3: CN_DI3
-         * - 4: CN_DO0
-         * - 5: CN_DO1
-         * - 6: CN_DO2
-         * - 7: CN_DO3
-         * - 8~15: N/A
-         */
-        #gpio-cells = <2>;
-        #interrupt-cells = <2>;
-        compatible = "semtech,sx1509q";
-        reg = <0x3f>;
+	clock-frequency = <400000>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_i2c6>;
+	status = "okay";
 
-        semtech,probe-reset;
-        gpio-controller;
-        interrupt-controller;
+	/* SX1509 */
+	gpio6: i2c6_gpioext0@3f {
+		/* GPIO Expander 0 Mapping :
+		 * - 0: CN_DI0
+		 * - 1: CN_DI1
+		 * - 2: CN_DI2
+		 * - 3: CN_DI3
+		 * - 4: CN_DO0
+		 * - 5: CN_DO1
+		 * - 6: CN_DO2
+		 * - 7: CN_DO3
+		 * - 8~15: N/A
+		 */
+	#gpio-cells = <2>;
+	#interrupt-cells = <2>;
+	compatible = "semtech,sx1509q";
+	reg = <0x3f>;
 
-        interrupt-parent = <&gpio1>;
-        interrupts = <12 IRQ_TYPE_EDGE_FALLING>;
+	semtech,probe-reset;
+	gpio-controller;
+	interrupt-controller;
+
+	interrupt-parent = <&gpio3>;
+	interrupts = <21 IRQ_TYPE_EDGE_FALLING>;
+	status = "okay";
     };
 };
 
@@ -773,6 +779,13 @@
 		fsl,pins = <
 			MX8MP_IOMUXC_I2C3_SCL__I2C3_SCL		0x400001c2
 			MX8MP_IOMUXC_I2C3_SDA__I2C3_SDA		0x400001c2
+		>;
+	};
+
+	pinctrl_i2c6: i2c6grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_UART4_RXD__I2C6_SCL	0x400001c2
+			MX8MP_IOMUXC_UART4_TXD__I2C6_SDA	0x400001c2
 		>;
 	};
 
