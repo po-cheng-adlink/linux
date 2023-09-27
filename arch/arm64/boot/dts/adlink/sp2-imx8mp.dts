@@ -6,7 +6,7 @@
 /dts-v1/;
 
 #include <dt-bindings/usb/pd.h>
-#include "imx8mp.dtsi"
+#include "../freescale/imx8mp.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/leds/common.h>
 
@@ -75,7 +75,6 @@
 		regulator-max-microvolt = <1800000>;
 		gpio = <&gpio4 27 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
-		regulator-always-on;
 	};
 
 	reg_usb0_pwr_en: regulator-usb0pwren {
@@ -148,6 +147,34 @@
 							90 91 92 93 94 95 96 97 98 99
 							100>;
 		default-brightness-level = <80>;
+	};
+
+	lvds0_panel {
+		compatible = "amp,am1024600d", "panel-lvds";
+		backlight = <&lvds_backlight>;
+		power-supply = <&reg_lvds_vdd_en>;
+
+		data-mapping = "vesa-24";
+		height-mm = <86>;
+		width-mm = <154>;
+
+		panel-timing {
+			clock-frequency = <51200000>;
+			hactive = <1024>;
+			vactive = <600>;
+			hback-porch = <50>;
+			hfront-porch = <40>;
+			vback-porch = <20>;
+			vfront-porch = <15>;
+			hsync-len = <80>;
+			vsync-len = <10>;
+		};
+
+		port {
+			panel_lvds_in: endpoint {
+				remote-endpoint = <&lvds_out>;
+			};
+		};
 	};
 
 	pwm-beeper {
@@ -528,6 +555,10 @@
     };
 };
 
+&mipi_dsi {
+	status = "disabled";
+};
+
 &irqsteer_hdmi {
 	status = "okay";
 };
@@ -541,7 +572,7 @@
 };
 
 &hdmi {
-	status = "okay";
+	status = "disabled";
 };
 
 &hdmiphy {
@@ -553,7 +584,7 @@
 };
 
 &lcdif2 {
-	status = "disabled";
+	status = "okay";
 };
 
 &lcdif3 {
@@ -561,6 +592,29 @@
 
 	thres-low  = <1 2>;             /* (FIFO * 1 / 2) */
 	thres-high = <3 4>;             /* (FIFO * 3 / 4) */
+};
+
+&ldb {
+	status = "okay";
+	/* fsl,dual-channel; */
+
+	lvds-channel@0 {
+		fsl,data-mapping = "spwg";
+		fsl,data-width = <24>;
+		status = "okay";
+
+		port@1 {
+			reg = <1>;
+
+			lvds_out: endpoint {
+				remote-endpoint = <&panel_lvds_in>;
+			};
+		};
+	};
+};
+
+&ldb_phy {
+	status = "okay";
 };
 
 &snvs_pwrkey {
