@@ -856,15 +856,6 @@
 		>;
 	};
 
-	pinctrl_uart1: uart1grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX	0x140
-			MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX	0x140
-			MX8MP_IOMUXC_UART3_RXD__UART1_DCE_CTS	0x140
-			MX8MP_IOMUXC_UART3_TXD__UART1_DCE_RTS	0x140
-		>;
-	};
-
 	pinctrl_typec: typec1grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19	0x1c4
@@ -877,12 +868,6 @@
 		>;
 	};
 
-	pinctrl_uart2: uart2grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x140
-			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x140
-		>;
-	};
 
 	pinctrl_usb0_pwr_en: usb0_pwr_en_grp {
 		fsl,pins = <
@@ -908,6 +893,22 @@
 		>;
 	};
 
+	pinctrl_uart1: uart1grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_UART1_RXD__UART1_DCE_RX	0x140
+			MX8MP_IOMUXC_UART1_TXD__UART1_DCE_TX	0x140
+			MX8MP_IOMUXC_UART3_RXD__UART1_DCE_CTS	0x140
+			MX8MP_IOMUXC_UART3_TXD__UART1_DCE_RTS	0x140
+		>;
+	};
+
+	pinctrl_uart2: uart2grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x140
+			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x140
+		>;
+	};
+
 	pinctrl_uart3: uart3grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_ECSPI1_SCLK__UART3_DCE_RX		0x140
@@ -919,10 +920,10 @@
 
     pinctrl_uart4: uart4grp {
         fsl,pins = <
-			MX8MP_IOMUXC_ECSPI2_SCLK__UART4_DCE_RX		0x140
-			MX8MP_IOMUXC_ECSPI2_MOSI__UART4_DCE_TX		0x140
-			MX8MP_IOMUXC_ECSPI2_SS0__UART4_DCE_RTS		0x140
-			MX8MP_IOMUXC_ECSPI2_MISO__UART4_DCE_CTS		0x140
+			MX8MP_IOMUXC_NAND_DATA00__UART4_DCE_RX		0x140
+			MX8MP_IOMUXC_NAND_DATA01__UART4_DCE_TX		0x140
+			MX8MP_IOMUXC_NAND_DATA02__UART4_DCE_CTS		0x140
+			MX8MP_IOMUXC_NAND_DATA03__UART4_DCE_RTS		0x140
         >;
     };
 
