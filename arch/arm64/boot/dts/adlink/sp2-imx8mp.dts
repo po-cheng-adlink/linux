@@ -149,6 +149,13 @@
 			com2-mode1-gpios = <&gpio3 24 GPIO_ACTIVE_LOW>;
 			status = "okay";
 	};
+
+	pwm-beeper {
+		compatible = "pwm-beeper";
+		pwms = <&pwm4 0 5000 0>;
+		volume-levels = <0 8 20 40 500>;
+		default-volume-level = <4>;
+	};
 };
 
 &A53_0 {
@@ -174,6 +181,12 @@
 &pwm2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_bl_pwm2>;
+	status = "okay";
+};
+
+&pwm4 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_buzz_pwm4>;
 	status = "okay";
 };
 
@@ -700,6 +713,12 @@
 	pinctrl_bl_pwm2: blpwm2grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO11__PWM2_OUT	0x116
+		>;
+	};
+
+	pinctrl_buzz_pwm4: buzzpwm4grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SAI5_RXFS__PWM4_OUT	0x116
 		>;
 	};
 
