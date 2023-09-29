@@ -135,21 +135,6 @@
 		default-brightness-level = <80>;
 	};
 
-	gpio_switch:gpio_switch {
-			compatible = "mxa,gpio-switch";
-			usb-hub-enable;
-			usb-mux-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-			hub-reset-gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
-			hwid1-gpios = <&gpio5 5 GPIO_ACTIVE_LOW>;
-			hwid2-gpios = <&gpio4 31 GPIO_ACTIVE_LOW>;
-			hwid3-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
-			com1-mode0-gpios = <&gpio5 3 GPIO_ACTIVE_HIGH>;
-			com1-mode1-gpios = <&gpio5 4 GPIO_ACTIVE_LOW>;
-			com2-mode0-gpios = <&gpio3 23 GPIO_ACTIVE_HIGH>;
-			com2-mode1-gpios = <&gpio3 24 GPIO_ACTIVE_LOW>;
-			status = "okay";
-	};
-
 	pwm-beeper {
 		compatible = "pwm-beeper";
 		pwms = <&pwm4 0 5000 0>;
@@ -677,6 +662,12 @@
 	status = "okay";
 };
 
+/*
+fsl,pins = <PIN_FUNC_ID CONFIG>,
+  - PIN_FUNC_ID is a pin (5-values) working on a specific function (MUX control)
+  - CONFIG is the pad setting (1-value) like pull-up for this pin. (PAD control)
+  see iomux-v3.h
+*/
 &iomuxc {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
@@ -686,21 +677,22 @@
 			MX8MP_IOMUXC_HDMI_DDC_SCL__HDMIMIX_HDMI_SCL	0x400001c3
 			MX8MP_IOMUXC_HDMI_DDC_SDA__HDMIMIX_HDMI_SDA	0x400001c3
 			MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD		0x40000019
-			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC		0x40000019
-	        MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07        0x00000106   //FUNCTION_INT
-	        MX8MP_IOMUXC_SAI3_RXD__GPIO4_IO30        0x00000104   //WWAN_RESET
-
-            MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12        0x00000106   //HUB_RESET
-            MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15        0x00000104   //USER LED
-            MX8MP_IOMUXC_SAI3_TXC__GPIO5_IO00          0x00000106   //HWID_3
-            MX8MP_IOMUXC_SAI3_TXFS__GPIO4_IO31         0x00000106   //HWID_2
-	        MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23         0x00000106   //GPIO_COM2_MODE0
-            MX8MP_IOMUXC_SAI5_RXD3__GPIO3_IO24         0x00000106   //GPIO_COM2_MODE1
-            MX8MP_IOMUXC_SD1_DATA6__GPIO2_IO08         0x00000106   //M.2 BT wakeup
-            MX8MP_IOMUXC_SD1_DATA7__GPIO2_IO09         0x00000106   //M.2 SDIO wakeup
-	        MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05     0x00000106	//HWID_1
-            MX8MP_IOMUXC_SPDIF_RX__GPIO5_IO04          0x00000106	//GPIO_COM1_MODE1
-	        MX8MP_IOMUXC_SPDIF_TX__GPIO5_IO03          0x00000106	//GPIO_COM1_MODE0
+			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC         0x40000019
+			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07             0x00000106    //FUNCTION_INT
+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12             0x00000106    //HUB_RESET
+			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29               0x00000106    // HWID_3
+			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28              0x00000106    // HWID_2
+			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05          0x00000106    // HWID_1
+			MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23              0x00000106    // I2C6_INT#
+			
+			MX8MP_IOMUXC_SAI5_MCLK__CAN2_RX                 0x00000106    // CAN2_RX
+			MX8MP_IOMUXC_SAI5_RXD3__GPIO3_IO24              0x00000106    // CAN2_TX
+			
+			MX8MP_IOMUXC_SD1_DATA6__GPIO2_IO08              0x00000106    //M.2 BT wakeup
+			MX8MP_IOMUXC_SD1_DATA7__GPIO2_IO09              0x00000106    //M.2 SDIO wakeup
+			
+			MX8MP_IOMUXC_SPDIF_RX__GPIO5_IO04               0x00000106    // CAN1_RX
+			MX8MP_IOMUXC_SPDIF_TX__GPIO5_IO03               0x00000106    // CAN1_TX
 		>;
 	};
 
