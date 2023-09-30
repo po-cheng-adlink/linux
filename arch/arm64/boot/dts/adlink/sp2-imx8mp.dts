@@ -726,6 +726,12 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 
+	pinctrl_usbhub_rst: usbhubrstgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12             0x106    //HUB_RESET
+		>;
+	};
+
 	pinctrl_eqos: eqosgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC				0x3
@@ -868,38 +874,37 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 
-	pinctrl_i2c2_synaptics_dsx_io: synaptics_dsx_iogrp {
+	pinctrl_i2c2_irq: i2c2irqgrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO09__GPIO1_IO09		0x16
+			MX8MP_IOMUXC_SAI1_TXD6__GPIO4_IO18	0x1c4
 		>;
 	};
 
-	pinctrl_typec: typec1grp {
+	pinctrl_i2c3_irq: i2c3irqgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_SAI1_TXD7__GPIO4_IO19	0x1c4
 		>;
 	};
 
-	pinctrl_typec_mux: typec1muxgrp {
+	pinctrl_hpdet: hpdetgrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20	0x16
+			MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20	0xC0
 		>;
 	};
 
-
-	pinctrl_usb0_pwr_en: usb0_pwr_en_grp {
+	pinctrl_usb0_pwr_en: usb0pwrengrp {
 		fsl,pins = <
 	        MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14     0x16
 		>;
 	};
 
-	pinctrl_usb0_id: usb0_id_grp {
+	pinctrl_usb0_otg_id: usb0otgidgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x19
 		>;
 	};
 	
-	pinctrl_usb0_mux: usb0_mux_grp {
+	pinctrl_usb0_mux: usb0muxgrp {
 		fsl,pins = <
 	        MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01     0x19	// GPIO_USB_MUX_SEL(Need check boot status is high or low)
 		>;
