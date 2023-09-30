@@ -116,6 +116,21 @@
 		status = "okay";
 	};
 
+	sound {
+		compatible = "fsl,sgtl5000", "fsl,imx-audio-sgtl5000";
+		model = "audio-sgtl5000";
+		codec-master;
+		ssi-controller = <&sai3>;
+		audio-codec = <&sgtl5000>;
+		audio-routing =
+			"MIC_IN", "Mic Jack",
+			"Mic Jack", "Mic Bias",
+			"Headphone Jack", "HP_OUT",
+			"Line Out Jack", "LINE_OUT";
+		mux-int-port = <1>;
+		mux-ext-port = <3>;
+	};
+
 	lvds_backlight: lvds_backlight {
 		compatible = "pwm-backlight";
 		pwms = <&pwm2 0 100000 0>;
@@ -426,6 +441,17 @@
 		reset-assert-us = <200000>;
 		status = "okay";
 	};
+
+	/* sgtl5000 audio codec */
+	sgtl5000: audio-codec@a {
+		compatible = "fsl,sgtl5000";
+		clocks = <&clk IMX8MP_CLK_SAI3_ROOT>;
+		assigned-clocks = <&clk IMX8MP_CLK_SAI3>;
+		assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
+		assigned-clock-rates = <24576000>;
+		#sound-dai-cells = <0>;
+		reg = <0x0a>;
+	};
 };
 
 &i2c6 {
@@ -553,6 +579,15 @@
 };
 
 &sdma2 {
+	status = "okay";
+};
+
+&sai3 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_sai3>;
+	assigned-clocks = <&clk IMX8MP_CLK_SAI3>;
+	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
+	assigned-clock-rates = <24576000>;
 	status = "okay";
 };
 
@@ -852,16 +887,6 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 
-
-	pinctrl_sai2: sai2grp {
-		fsl,pins = <
-			MX8MP_IOMUXC_SAI2_TXC__AUDIOMIX_SAI2_TX_BCLK	0xd6
-			MX8MP_IOMUXC_SAI2_TXFS__AUDIOMIX_SAI2_TX_SYNC	0xd6
-			MX8MP_IOMUXC_SAI2_TXD0__AUDIOMIX_SAI2_TX_DATA00	0xd6
-			MX8MP_IOMUXC_SAI2_RXD0__AUDIOMIX_SAI2_RX_DATA00	0xd6
-		>;
-	};
-
 	pinctrl_sai3: sai3grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_SAI3_TXFS__AUDIOMIX_SAI3_TX_SYNC	0xd6
@@ -869,8 +894,6 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 			MX8MP_IOMUXC_SAI3_RXD__AUDIOMIX_SAI3_RX_DATA00	0xd6
 			MX8MP_IOMUXC_SAI3_TXD__AUDIOMIX_SAI3_TX_DATA00	0xd6
 			MX8MP_IOMUXC_SAI3_MCLK__AUDIOMIX_SAI3_MCLK	0xd6
-			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28		0xd6
-			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29		0xd6
 		>;
 	};
 
