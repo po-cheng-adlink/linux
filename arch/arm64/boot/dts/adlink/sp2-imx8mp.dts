@@ -390,11 +390,13 @@
 	
 	/* RTC: PCF85063A */
 	rtc: pcf85063a@51 {
-		reg = <0x51>;
-        quartz-load-femtofarads = <12500>;
 		compatible = "nxp,pcf85063a";
-        interrupt-parent = <&gpio3>;
-        interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_rtc>;
+		quartz-load-femtofarads = <12500>;
+		reg = <0x51>;
+		interrupt-parent = <&gpio3>;
+		interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
 	};
 
 	/* PCIe CLK GEN: PI6CG33202C-ZDIEX */
@@ -679,7 +681,6 @@
             MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15        0x00000104   //USER LED
             MX8MP_IOMUXC_SAI3_TXC__GPIO5_IO00          0x00000106   //HWID_3
             MX8MP_IOMUXC_SAI3_TXFS__GPIO4_IO31         0x00000106   //HWID_2
-            MX8MP_IOMUXC_SAI5_RXD1__GPIO3_IO22         0x00000106   //RTC INT
 	        MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23         0x00000106   //GPIO_COM2_MODE0
             MX8MP_IOMUXC_SAI5_RXD3__GPIO3_IO24         0x00000106   //GPIO_COM2_MODE1
             MX8MP_IOMUXC_SD1_DATA6__GPIO2_IO08         0x00000106   //M.2 BT wakeup
@@ -687,6 +688,12 @@
 	        MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05     0x00000106	//HWID_1
             MX8MP_IOMUXC_SPDIF_RX__GPIO5_IO04          0x00000106	//GPIO_COM1_MODE1
 	        MX8MP_IOMUXC_SPDIF_TX__GPIO5_IO03          0x00000106	//GPIO_COM1_MODE0
+		>;
+	};
+
+	pinctrl_rtc: rtcgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SAI5_RXD1__GPIO3_IO22	0x80  /* RTC intr */
 		>;
 	};
 
