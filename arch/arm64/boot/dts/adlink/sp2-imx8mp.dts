@@ -178,6 +178,34 @@
 	status = "okay";
 };
 
+&gpio1 {
+	pinctrl-0 = <&pinctrl_gpio1_hog>;
+
+	gpio-line-names =	\
+		"", "USB_MUX_SEL", "", "", "", "", "", "",	\
+		"FUNCTION_INT", "", "", "USB1_OTG_ID", "", "", "", "",	\
+		"", "", "", "", "", "", "", "",	\
+		"", "", "", "", "", "", "", "";
+
+	usb_mus_sel {
+		gpio-hog;
+		gpios = <1 GPIO_ACTIVE_HIGH>;
+		output-high;
+	};
+
+	function_int {
+		gpio-hog;
+		gpios = <7 GPIO_ACTIVE_HIGH>;
+		input;
+	};
+
+	usb1_otg_id {
+		gpio-hog;
+		gpios = <10 GPIO_ACTIVE_HIGH>;
+		input;
+	};
+};
+
 &pwm2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_bl_pwm2>;
@@ -520,6 +548,14 @@
 	status = "okay";
 };
 
+&lcdif1 {
+	status = "disabled";
+};
+
+&lcdif2 {
+	status = "disabled";
+};
+
 &lcdif3 {
 	status = "okay";
 
@@ -653,10 +689,6 @@
 };
 
 &usb_dwc3_0 {
-	pinctrl-names = "default";
-	/* high: DS1-DP/N type-A port, low: otg HS-DP/N microUSB port */
-	pinctrl-0 = <&pinctrl_usb0_mux>;
-	mux_gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
 	dr_mode = "host";
 	status = "okay";
 };
@@ -746,8 +778,7 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 			MX8MP_IOMUXC_HDMI_DDC_SDA__HDMIMIX_HDMI_SDA	0x400001c3
 			MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD		0x40000019
 			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC         0x40000019
-			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07             0x00000106    //FUNCTION_INT
-			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12             0x00000106    //HUB_RESET
+
 			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29               0x00000106    // HWID_3
 			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28              0x00000106    // HWID_2
 			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05          0x00000106    // HWID_1
@@ -968,15 +999,23 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 	
-	pinctrl_usb0_mux: usb0muxgrp {
+	pinctrl_gpio1_hog: gpio1hoggrp {
 		fsl,pins = <
 	        MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01     0x19	// GPIO_USB_MUX_SEL(Need check boot status is high or low)
+	        MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07     0x80	// FUNCTION_INT
+	        MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x80	// USB1_OTG_ID
 		>;
 	};
 
 	pinctrl_usb1_oc: usb1ocgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO15__USB2_OC		0x19
+		>;
+	};
+
+	pinctrl_usb2_oc: usb2ocgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO13__USB1_OC		0x19
 		>;
 	};
 
