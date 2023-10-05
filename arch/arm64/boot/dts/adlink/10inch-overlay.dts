@@ -1,0 +1,35 @@
+
+/dts-v1/;
+
+/ {
+
+	/delete-node/ lvds0_panel;
+
+	lvds0_panel {
+		compatible = "amp,am1280800w", "panel-lvds";
+		backlight = <&lvds_backlight>;
+		power-supply = <&reg_lvds_vdd_en>;
+
+		data-mapping = "vesa-24";
+		height-mm = <86>;
+		width-mm = <154>;
+
+		panel-timing {
+			clock-frequency = <71000000>;
+			hactive = <1280>;
+			vactive = <800>;
+			hback-porch = <80>;
+			hfront-porch = <70>;
+			vback-porch = <10>;
+			vfront-porch = <10>;
+			hsync-len = <10>;
+			vsync-len = <3>;
+		};
+
+		port {
+			panel_lvds_in: endpoint {
+				remote-endpoint = <&lvds_out>;
+			};
+		};
+	};
+};
