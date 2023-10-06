@@ -233,6 +233,41 @@
 	};
 };
 
+&gpio4 {
+	pinctrl-0 = <&pinctrl_gpio4_hog>;
+
+	gpio-line-names =	\
+		"", "", "", "", "", "", "", "",	\
+		"", "", "", "", "", "", "", "",	\
+		"", "", "", "", "", "", "", "",	\
+		"GPIO_COM1_MODE0", "GPIO_COM1_MODE1", "", "", "HWID_2", "HWID_3", "", "";
+
+	gpio_com1_mode0 {
+		gpio-hog;
+		gpios = <24 GPIO_ACTIVE_HIGH>;
+		output-low;
+	};
+
+	gpio_com1_mode1 {
+		gpio-hog;
+		gpios = <25 GPIO_ACTIVE_HIGH>;
+		output-low;
+	};
+
+	hwid_2 {
+		gpio-hog;
+		gpios = <28 GPIO_ACTIVE_HIGH>;
+		input;
+	};
+
+	hwid_3 {
+		gpio-hog;
+		gpios = <29 GPIO_ACTIVE_HIGH>;
+		input;
+	};
+};
+
+
 &pwm2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_bl_pwm2>;
@@ -1051,6 +1086,15 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 	        MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01     0x19	// GPIO_USB_MUX_SEL(Need check boot status is high or low)
 	        MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07     0x80	// FUNCTION_INT
 	        MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x80	// USB1_OTG_ID
+		>;
+	};
+
+	pinctrl_gpio4_hog: gpio4hoggrp {
+		fsl,pins = <
+	        MX8MP_IOMUXC_SAI2_TXFS__GPIO4_IO24      0x19	// GPIO_COM1_MODE0
+	        MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25       0x19	// GPIO_COM1_MODE1
+	        MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28      0x80	// HWID_2
+	        MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29		0x80	// HWID_3
 		>;
 	};
 
