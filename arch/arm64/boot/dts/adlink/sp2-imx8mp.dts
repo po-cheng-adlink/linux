@@ -605,7 +605,7 @@
 };
 
 &hdmi {
-	status = "disabled";
+	status = "okay";
 };
 
 &hdmiphy {
