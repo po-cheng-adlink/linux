@@ -1,35 +1,45 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * Copyright 2023 ADLINK Technology Corp.
+ *
+ * Author: Po Cheng <po.cheng@adlinktech.com>
+ */
 
 /dts-v1/;
+/plugin/;
 
 / {
-
-	/delete-node/ lvds0_panel;
-
-	lvds0_panel {
-		compatible = "amp,am1280800w", "panel-lvds";
-		backlight = <&lvds_backlight>;
-		power-supply = <&reg_lvds_vdd_en>;
-
-		data-mapping = "vesa-24";
-		height-mm = <86>;
-		width-mm = <154>;
-
-		panel-timing {
-			clock-frequency = <71000000>;
-			hactive = <1280>;
-			vactive = <800>;
-			hback-porch = <80>;
-			hfront-porch = <70>;
-			vback-porch = <10>;
-			vfront-porch = <10>;
-			hsync-len = <10>;
-			vsync-len = <3>;
+	fragment@0 {
+		target-path = "/";
+		__overlay__ {
+			lvds_backlight {
+				status = "okay";
+			};
 		};
+	};
 
-		port {
-			panel_lvds_in: endpoint {
-				remote-endpoint = <&lvds_out>;
+	fragment@1 {
+		target-path = "/";
+		__overlay__ {
+			lvds0_panel {
+				compatible = "amp,am1280800d", "panel-lvds";
+
+				height-mm = <135>;
+				width-mm = <217>;
+
+				panel-timing {
+					clock-frequency = <71000000>;
+					hactive = <1280>;
+					vactive = <800>;
+					hback-porch = <80>;
+					hfront-porch = <70>;
+					vback-porch = <10>;
+					vfront-porch = <10>;
+					hsync-len = <10>;
+					vsync-len = <3>;
+				};
 			};
 		};
 	};
 };
+
