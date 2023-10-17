@@ -99,7 +99,29 @@
 		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 	};
-	
+
+   reg_ex_auido_3v: regulator-ex-audio-3v {
+       compatible = "regulator-fixed";
+       regulator-name = "ex-audio-3V";
+       regulator-min-microvolt = <3300000>;
+       regulator-max-microvolt = <3300000>;
+       regulator-always-on;
+   };
+
+   reg_ex_auido_1v8: regulatorex-audio-1v8 {
+       compatible = "regulator-fixed";
+       regulator-name = "+V1.8";
+       regulator-min-microvolt = <1800000>;
+       regulator-max-microvolt = <1800000>;
+       regulator-always-on;
+   };
+
+	ex_audio_clk: sgtl5000_19M {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <19200000>; /* 19.2MHz */
+	};
+
 	sound-hdmi {
 		compatible = "fsl,imx-audio-hdmi";
 		model = "audio-hdmi";
@@ -548,12 +570,13 @@
 	/* sgtl5000 audio codec */
 	sgtl5000: audio-codec@a {
 		compatible = "fsl,sgtl5000";
-		clocks = <&clk IMX8MP_CLK_SAI3_ROOT>;
-		assigned-clocks = <&clk IMX8MP_CLK_SAI3>;
-		assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
-		assigned-clock-rates = <24576000>;
 		#sound-dai-cells = <0>;
 		reg = <0x0a>;
+		micbias-voltage-m-volts = <2250>;
+		VDDA-supply = <&reg_ex_auido_3v>;
+		VDDIO-supply = <&reg_ex_auido_3v>;
+		VDDD-supply = <&reg_ex_auido_1v8>;
+		clocks = <&ex_audio_clk>;
 	};
 };
 
@@ -723,14 +746,7 @@
 &sai3 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_sai3>;
-	assigned-clocks = <&clk IMX8MP_CLK_SAI3>;
-	assigned-clock-parents = <&clk IMX8MP_AUDIO_PLL1_OUT>;
-	assigned-clock-rates = <12000000>;
-	clocks = <&audio_blk_ctrl IMX8MP_CLK_AUDIO_BLK_CTRL_SAI3_IPG>, <&clk IMX8MP_CLK_DUMMY>,
-		 <&audio_blk_ctrl IMX8MP_CLK_AUDIO_BLK_CTRL_SAI3_MCLK1>, <&clk IMX8MP_CLK_DUMMY>,
-		 <&clk IMX8MP_CLK_DUMMY>;
-	clock-names = "bus", "mclk0", "mclk1", "mclk2", "mclk3";
-	fsl,sai-mclk-direction-output;
+	/* fsl,sai-mclk-direction-output; */
 	status = "okay";
 };
 
