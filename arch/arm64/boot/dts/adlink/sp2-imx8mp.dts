@@ -209,11 +209,11 @@
 	pinctrl-0 = <&pinctrl_gpio1_hog>;
 
 	gpio-line-names =	\
-		"", "USB_MUX_SEL", "", "", "", "", "", "",	\
-		"FUNCTION_INT", "", "", "USB1_OTG_ID", "", "", "", "",	\
+		"", "USB_MUX_SEL", "", "", "", "", "", "FUNCTION_INT",	\
+		"", "", "USB1_OTG_ID", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "";
-
+/*
 	usb_mus_sel {
 		gpio-hog;
 		gpios = <1 GPIO_ACTIVE_HIGH>;
@@ -231,6 +231,7 @@
 		gpios = <10 GPIO_ACTIVE_HIGH>;
 		input;
 	};
+*/
 };
 
 &gpio4 {
@@ -240,8 +241,9 @@
 		"", "", "", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "",	\
-		"GPIO_COM1_MODE0", "GPIO_COM1_MODE1", "", "", "HWID_2", "HWID_3", "", "";
+		"COM1_MODE0", "COM1_MODE1", "", "", "HWID_2", "HWID_3", "", "";
 
+/* comments to show the usage of gpio pins
 	gpio_com1_mode0 {
 		gpio-hog;
 		gpios = <24 GPIO_ACTIVE_HIGH>;
@@ -265,6 +267,7 @@
 		gpios = <29 GPIO_ACTIVE_HIGH>;
 		input;
 	};
+*/
 };
 
 
@@ -514,7 +517,7 @@
 		interrupts = <22 IRQ_TYPE_EDGE_FALLING>;
 	};
 
-	/* PCIe CLK GEN: PI6CG33202C-ZDIEX */
+	/* Comment to show an external PCIe CLK GEN: PI6CG33202C-ZDIEX */
 	/* pcieclk0: pi6cg33202@6a {
 		reg = <0x6a>;
 		compatible = "pi,6cg33202";
