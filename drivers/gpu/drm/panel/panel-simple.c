@@ -2464,6 +2464,39 @@ static const struct panel_desc giantplus_gpm940b0 = {
 	.bus_flags = DRM_BUS_FLAG_DE_HIGH | DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE,
 };
 
+static const struct display_timing hannstar_hsd070ifw1_timing = {
+	.pixelclock = { 40800000, 51200000, 67200000 },
+	.hactive = { 1024, 1024, 1024 },
+	.hfront_porch = { 150, 150, 150 },
+	.hback_porch = { 150, 150, 150 },
+	.hsync_len = { 90, 320, 376 },
+
+	.vactive = { 600, 600, 600 },
+	.vfront_porch = { 15, 15, 15 },
+	.vback_porch = { 15, 15, 15 },
+	.vsync_len = { 10, 35, 200 },
+	.flags = DISPLAY_FLAGS_DE_HIGH,
+};
+
+static const struct panel_desc hannstar_hsd070ifw1 = {
+	.timings = &hannstar_hsd070ifw1_timing,
+	.num_timings = 1,
+	.bpc = 8,
+	.size = {
+		.width = 154,
+		.height = 86,
+	},
+	.delay = {
+		.prepare = 10,
+		.enable = 100,
+		.disable = 100,
+		.unprepare = 800,
+	},
+	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
+	.connector_type = DRM_MODE_CONNECTOR_LVDS,
+};
+
+
 static const struct display_timing hannstar_hsd070pww1_timing = {
 	.pixelclock = { 64300000, 71100000, 82000000 },
 	.hactive = { 1280, 1280, 1280 },
@@ -4785,6 +4818,9 @@ static const struct of_device_id platform_of_match[] = {
 	}, {
 		.compatible = "giantplus,gpm940b0",
 		.data = &giantplus_gpm940b0,
+	}, {
+		.compatible = "hannstar,hsd070ifw1",
+		.data = &hannstar_hsd070ifw1,
 	}, {
 		.compatible = "hannstar,hsd070pww1",
 		.data = &hannstar_hsd070pww1,
