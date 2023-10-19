@@ -187,7 +187,7 @@
 	};
 
 	lvds0_panel {
-		compatible = "hannstar,hsd070ifw1";
+		compatible = "hannstar,hsd070ifw1", "panel-simple";
 		backlight = <&lvds_backlight>;
 		power-supply = <&reg_lvds_vdd_en>;
 
