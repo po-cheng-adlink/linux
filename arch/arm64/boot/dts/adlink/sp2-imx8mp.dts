@@ -201,9 +201,7 @@
 
 	pwm-beeper {
 		compatible = "pwm-beeper";
-		pwms = <&pwm4 0 5000 0>;
-		volume-levels = <0 8 20 40 500>;
-		default-volume-level = <4>;
+		pwms = <&pwm4 0 500000 0>;
 	};
 };
 
