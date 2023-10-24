@@ -1339,18 +1339,22 @@ static int sgtl5000_set_power_regs(struct snd_soc_component *component)
 					SGTL5000_INT_OSC_EN);
 		/* Enable VDDC charge pump */
 		ana_pwr |= SGTL5000_VDDC_CHRGPMP_POWERUP;
-	} else {
+	} else if (vddio >= 3100 && vdda >= 3100) {
+		/* Disable charge pump */
 		ana_pwr &= ~SGTL5000_VDDC_CHRGPMP_POWERUP;
-		/*
-		 * if vddio == vdda the source of charge pump should be
-		 * assigned manually to VDDIO
-		 */
-		if (regulator_is_equal(sgtl5000->supplies[VDDA].consumer,
-				       sgtl5000->supplies[VDDIO].consumer)) {
-			lreg_ctrl |= SGTL5000_VDDC_ASSN_OVRD;
-			lreg_ctrl |= SGTL5000_VDDC_MAN_ASSN_VDDIO <<
-				    SGTL5000_VDDC_MAN_ASSN_SHIFT;
-		}
+
+		/* VDDC use VDDIO rail */
+		lreg_ctrl |= SGTL5000_VDDC_ASSN_OVRD;
+		lreg_ctrl |= SGTL5000_VDDC_MAN_ASSN_VDDIO <<
+				SGTL5000_VDDC_MAN_ASSN_SHIFT;
+	} else {
+		dev_info(component->dev, "SGTL5000 will choose highest voltage automatically!\n");
+
+		/* Disable charge pump */
+		ana_pwr &= ~SGTL5000_VDDC_CHRGPMP_POWERUP;
+
+		/* Switch to highest supply voltage */
+		lreg_ctrl &= ~SGTL5000_VDDC_ASSN_OVRD;
 	}
 
 	snd_soc_component_write(component, SGTL5000_CHIP_LINREG_CTRL, lreg_ctrl);
