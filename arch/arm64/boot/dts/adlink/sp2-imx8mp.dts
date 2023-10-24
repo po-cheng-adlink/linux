@@ -122,6 +122,18 @@
 		clock-frequency = <19200000>; /* 19.2MHz */
 	};
 
+	reg_speaker_amp: regulator-audio-amplifier {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_usbhub_spkamp>;
+		regulator-name = "speaker-amp";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		gpios = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-always-on;
+	};
+
 	sound-hdmi {
 		compatible = "fsl,imx-audio-hdmi";
 		model = "audio-hdmi";
@@ -138,8 +150,11 @@
 	};
 
 	sound {
-		compatible = "fsl,sgtl5000", "fsl,imx-audio-sgtl5000";
+		compatible = "fsl,imx-audio-sgtl5000";
 		model = "audio-sgtl5000";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_hpdet>;
+		hp-det-gpio = <&gpio4 20 GPIO_ACTIVE_LOW>;
 		codec-master;
 		ssi-controller = <&sai3>;
 		audio-codec = <&sgtl5000>;
@@ -148,8 +163,8 @@
 			"Mic Jack", "Mic Bias",
 			"Headphone Jack", "HP_OUT",
 			"Line Out Jack", "LINE_OUT";
-		/* mux-int-port = <1>; */
-		/* mux-ext-port = <3>; */
+		mux-int-port = <1>;
+		mux-ext-port = <3>;
 	};
 
 	lvds_backlight: lvds_backlight {
@@ -922,9 +937,9 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 
-	pinctrl_usbhub_rst: usbhubrstgrp {
+	pinctrl_usbhub_spkamp: usbhubspkampgrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12             0x106    //HUB_RESET
+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12             0x146    //HUB_RESET or AUDIO_AMP
 		>;
 	};
 
