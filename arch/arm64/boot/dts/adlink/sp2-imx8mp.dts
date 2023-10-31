@@ -6,7 +6,7 @@
 /dts-v1/;
 
 #include <dt-bindings/usb/pd.h>
-#include "../freescale/imx8mp.dtsi"
+#include "./imx8mp.dtsi"
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/leds/common.h>
 
