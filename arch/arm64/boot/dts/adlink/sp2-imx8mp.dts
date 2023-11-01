@@ -574,7 +574,7 @@
 		pinctrl-names = "default";
 		pinctrl-0 = <&pinctrl_tpm>;
 		interrupt-parent = <&gpio3>;
-		interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
+		interrupts = <14 IRQ_TYPE_EDGE_FALLING>;
 		tpm-reset = <&gpio1 6 GPIO_ACTIVE_LOW>;
 		reset-assert-us = <200000>;
 		status = "okay";
