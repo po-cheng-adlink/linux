@@ -610,31 +610,31 @@
 	status = "okay";
 
 	/* SX1509 */
-	gpio6: i2c6_gpioext0@3f {
+	sx1509: gpioext0@3f {
+		#gpio-cells = <2>;
+		#interrupt-cells = <2>;
+		compatible = "semtech,sx1509q";
+		reg = <0x3f>;
+
+		semtech,probe-reset;
+		gpio-controller;
+		interrupt-controller;
+
+		interrupt-parent = <&gpio3>;
+		interrupts = <21 IRQ_TYPE_EDGE_FALLING>;
+
+		gpio-line-names =	\
+		"DI0", "DI1", "DI2", "DI3", "DO0", "DO1", "DO2", "DO3",	\
+		"", "", "", "", "", "", "", "";
+
+		status = "okay";
+
 		/* GPIO Expander 0 Mapping :
-		 * - 0: CN_DI0
-		 * - 1: CN_DI1
-		 * - 2: CN_DI2
-		 * - 3: CN_DI3
-		 * - 4: CN_DO0
-		 * - 5: CN_DO1
-		 * - 6: CN_DO2
-		 * - 7: CN_DO3
-		 * - 8~15: N/A
+		 * 0: CN_DI0, 1: CN_DI1, 2: CN_DI2, 3: CN_DI3,
+		 * 4: CN_DO0, 5: CN_DO1, 6: CN_DO2, 7: CN_DO3
+		 * 8~15: N/A
 		 */
-	#gpio-cells = <2>;
-	#interrupt-cells = <2>;
-	compatible = "semtech,sx1509q";
-	reg = <0x3f>;
-
-	semtech,probe-reset;
-	gpio-controller;
-	interrupt-controller;
-
-	interrupt-parent = <&gpio3>;
-	interrupts = <21 IRQ_TYPE_EDGE_FALLING>;
-	status = "okay";
-    };
+	};
 };
 
 &mipi_dsi {
