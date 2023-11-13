@@ -12,6 +12,7 @@ dtbo-$(CONFIG_ARCH_MXC) += cma400mb-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += cma750mb-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += cma950mb-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += 10inch-overlay.dtbo
+dtbo-$(CONFIG_ARCH_MXC) += 7inch-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += awcm276masur-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += awcm276mapur-overlay.dtbo
 

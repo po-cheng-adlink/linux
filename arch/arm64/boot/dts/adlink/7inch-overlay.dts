@@ -22,23 +22,23 @@
 		target-path = "/";
 		__overlay__ {
 			lvds0_panel {
-				compatible = "amp,am1280800d", "panel-lvds";
+				compatible = "hannstar,hsd070ifw1", "panel-simple";
 
-				height-mm = <135>;
-				width-mm = <217>;
+				height-mm = <86>;
+				width-mm = <154>;
 
 				status = "okay";
 
-				panel-timing {
-					clock-frequency = <71000000>;
-					hactive = <1280>;
-					vactive = <800>;
-					hback-porch = <80>;
-					hfront-porch = <70>;
-					vback-porch = <10>;
-					vfront-porch = <10>;
-					hsync-len = <10>;
-					vsync-len = <3>;
+				display-timing {
+					clock-frequency = <51200000>;
+					hactive = <1024>;
+					vactive = <600>;
+					hback-porch = <150>;
+					hfront-porch = <150>;
+					vback-porch = <15>;
+					vfront-porch = <15>;
+					hsync-len = <20>;
+					vsync-len = <5>;
 				};
 			};
 		};

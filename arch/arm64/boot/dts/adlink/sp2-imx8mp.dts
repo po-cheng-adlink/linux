@@ -170,7 +170,7 @@
 	lvds_backlight: lvds_backlight {
 		compatible = "pwm-backlight";
 		pwms = <&pwm2 0 100000 0>;
-		status = "okay";
+		status = "disabled";
 
 		brightness-levels = < 0  1  2  3  4  5  6  7  8  9
 							10 11 12 13 14 15 16 17 18 19
@@ -194,6 +194,8 @@
 		data-mapping = "vesa-24";
 		height-mm = <86>;
 		width-mm = <154>;
+
+		status = "disabled";
 
 		display-timing {
 			clock-frequency = <51200000>;
@@ -677,13 +679,11 @@
 };
 
 &ldb {
-	status = "okay";
 	/* fsl,dual-channel; */
 
 	lvds-channel@0 {
 		fsl,data-mapping = "spwg";
 		fsl,data-width = <24>;
-		status = "okay";
 
 		port@1 {
 			reg = <1>;
@@ -693,10 +693,6 @@
 			};
 		};
 	};
-};
-
-&ldb_phy {
-	status = "okay";
 };
 
 &snvs_pwrkey {
