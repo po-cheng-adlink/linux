@@ -89,6 +89,20 @@
 		regulator-always-on;
 	};
 
+	gpio-keys {
+		compatible = "gpio-keys";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_gpio_keys>;
+
+		wakeup {
+			label = "Wake-Up";
+			gpios = <&gpio1 7 GPIO_ACTIVE_LOW>;
+			linux,code = <KEY_WAKEUP>;
+			debounce-interval = <10>;
+			wakeup-source;
+		};
+	};
+
 	reg_usdhc2_vmmc: regulator-usdhc2 {
 		compatible = "regulator-fixed";
 		pinctrl-names = "default";
@@ -250,6 +264,7 @@
 		"", "", "USB1_OTG_ID", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "";
+
 /*
 	usb_mus_sel {
 		gpio-hog;
@@ -306,7 +321,6 @@
 	};
 */
 };
-
 
 &pwm2 {
 	pinctrl-names = "default";
@@ -1054,6 +1068,12 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 
+	pinctrl_gpio_keys: gpiokeysgrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07		0x80 // FUNCTION_INT
+		>;
+	};
+
 	pinctrl_hpdet: hpdetgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20	0xC0
@@ -1075,7 +1095,6 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 	pinctrl_gpio1_hog: gpio1hoggrp {
 		fsl,pins = <
 	        MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01     0x19	// GPIO_USB_MUX_SEL(Need check boot status is high or low)
-	        MX8MP_IOMUXC_GPIO1_IO07__GPIO1_IO07     0x80	// FUNCTION_INT
 	        MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x80	// USB1_OTG_ID
 		>;
 	};
