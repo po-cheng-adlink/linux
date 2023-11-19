@@ -241,67 +241,56 @@
 };
 
 &gpio1 {
+	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_gpio1_hog>;
 
-	gpio-line-names =	\
-		"", "USB_MUX_SEL", "", "", "", "", "", "FUNCTION_INT",	\
-		"", "", "USB1_OTG_ID", "", "", "", "", "",	\
-		"", "", "", "", "", "", "", "",	\
-		"", "", "", "", "", "", "", "";
-
 /*
-	usb_mus_sel {
+	gpio-line-names =       \
+		"", "USB_MUX_SEL", "", "", "", "", "", "",  \
+		"", "", "", "", "", "", "", "",      \
+		"", "", "", "", "", "", "", "", \
+		"", "", "", "", "", "", "", "";
+*/
+	usb_mux_sel {
 		gpio-hog;
 		gpios = <1 GPIO_ACTIVE_HIGH>;
 		output-high;
+		line-name = "USB_MUX_SEL";
 	};
-
-	function_int {
-		gpio-hog;
-		gpios = <7 GPIO_ACTIVE_HIGH>;
-		input;
-	};
-
-	usb1_otg_id {
-		gpio-hog;
-		gpios = <10 GPIO_ACTIVE_HIGH>;
-		input;
-	};
-*/
 };
 
 &gpio4 {
+	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_gpio4_hog>;
 
 	gpio-line-names =	\
 		"", "", "", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "",	\
-		"COM1_MODE0", "COM1_MODE1", "", "", "HWID_2", "HWID_3", "", "";
-
-/* comments to show the usage of gpio pins
-	gpio_com1_mode0 {
-		gpio-hog;
-		gpios = <24 GPIO_ACTIVE_HIGH>;
+		"UART_MODE0", "UART_MODE1", "", "", "HWID_2", "HWID_3", "", "";
+/*
+	uart_mode0 {
+		gpios = <&gpio4 24 GPIO_ACTIVE_HIGH>;
 		output-low;
+		line-name = "UART_MODE0";
 	};
 
-	gpio_com1_mode1 {
-		gpio-hog;
-		gpios = <25 GPIO_ACTIVE_HIGH>;
+	uart_mode1 {
+		gpios = <&gpio4 25 GPIO_ACTIVE_HIGH>;
 		output-low;
+		line-name = "UART_MODE1";
 	};
 
 	hwid_2 {
-		gpio-hog;
-		gpios = <28 GPIO_ACTIVE_HIGH>;
+		gpios = <&gpio4 28 GPIO_ACTIVE_HIGH>;
 		input;
+		line-name = "HWID_2";
 	};
 
 	hwid_3 {
-		gpio-hog;
-		gpios = <29 GPIO_ACTIVE_HIGH>;
+		gpios = <&gpio4 29 GPIO_ACTIVE_HIGH>;
 		input;
+		line-name = "HWID_3";
 	};
 */
 };
@@ -315,6 +304,13 @@
 		"", "", "", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "",	\
 		"", "", "", "", "", "", "", "";
+/*
+	hwid_1 {
+		gpios = <&gpio5 5 GPIO_ACTIVE_HIGH>;
+		input;
+		line-name = "HWID_1";
+	};
+*/
 };
 
 &pwm2 {
@@ -1085,8 +1081,8 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 
 	pinctrl_gpio4_hog: gpio4hoggrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_SAI2_TXFS__GPIO4_IO24	0x19	// GPIO_COM1_MODE0
-			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25	0x19	// GPIO_COM1_MODE1
+			MX8MP_IOMUXC_SAI2_TXFS__GPIO4_IO24	0x19	// UART_MODE0
+			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25	0x19	// UART_MODE1
 			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x80	// HWID_2
 			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x80	// HWID_3
 		>;
