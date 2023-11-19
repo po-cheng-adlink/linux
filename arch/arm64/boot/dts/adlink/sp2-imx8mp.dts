@@ -306,6 +306,17 @@
 */
 };
 
+&gpio5 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_gpio5_hog>;
+
+	gpio-line-names =	\
+		"", "", "", "", "", "HWID_1", "", "",	\
+		"", "", "", "", "", "", "", "",	\
+		"", "", "", "", "", "", "", "",	\
+		"", "", "", "", "", "", "", "";
+};
+
 &pwm2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_bl_pwm2>;
@@ -857,7 +868,6 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 			MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD		0x40000019
 			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC		0x40000019
 
-			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05	0x00000106	// HWID_1
 			MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23	0x00000106	// I2C6_INT#
 			MX8MP_IOMUXC_SD1_DATA6__GPIO2_IO08	0x00000106	// M.2 BT wakeup
 			MX8MP_IOMUXC_SD1_DATA7__GPIO2_IO09	0x00000106	// M.2 SDIO wakeup
@@ -1079,6 +1089,12 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25	0x19	// GPIO_COM1_MODE1
 			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x80	// HWID_2
 			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x80	// HWID_3
+		>;
+	};
+
+	pinctrl_gpio5_hog: gpio5hoggrp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05	0x00000106	// HWID_1
 		>;
 	};
 
