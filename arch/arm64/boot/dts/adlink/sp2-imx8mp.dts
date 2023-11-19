@@ -524,9 +524,9 @@
 };
 
 &flexcan1 {
-        pinctrl-names = "default";
-        pinctrl-0 = <&pinctrl_flexcan1>;
-        status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_flexcan1>;
+	status = "okay";
 };
 
 &ecspi2 {
@@ -671,8 +671,8 @@
 &lcdif3 {
 	status = "okay";
 
-	thres-low  = <1 2>;             /* (FIFO * 1 / 2) */
-	thres-high = <3 4>;             /* (FIFO * 3 / 4) */
+	thres-low  = <1 2>;	 /* (FIFO * 1 / 2) */
+	thres-high = <3 4>;	 /* (FIFO * 3 / 4) */
 };
 
 &ldb {
@@ -855,14 +855,12 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 			MX8MP_IOMUXC_HDMI_DDC_SCL__HDMIMIX_HDMI_SCL	0x400001c3
 			MX8MP_IOMUXC_HDMI_DDC_SDA__HDMIMIX_HDMI_SDA	0x400001c3
 			MX8MP_IOMUXC_HDMI_HPD__HDMIMIX_HDMI_HPD		0x40000019
-			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC         0x40000019
+			MX8MP_IOMUXC_HDMI_CEC__HDMIMIX_HDMI_CEC		0x40000019
 
-			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29               0x00000106    // HWID_3
-			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28              0x00000106    // HWID_2
-			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05          0x00000106    // HWID_1
-			MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23              0x00000106    // I2C6_INT#
-			MX8MP_IOMUXC_SD1_DATA6__GPIO2_IO08              0x00000106    //M.2 BT wakeup
-			MX8MP_IOMUXC_SD1_DATA7__GPIO2_IO09              0x00000106    //M.2 SDIO wakeup
+			MX8MP_IOMUXC_SPDIF_EXT_CLK__GPIO5_IO05	0x00000106	// HWID_1
+			MX8MP_IOMUXC_SAI5_RXD2__GPIO3_IO23	0x00000106	// I2C6_INT#
+			MX8MP_IOMUXC_SD1_DATA6__GPIO2_IO08	0x00000106	// M.2 BT wakeup
+			MX8MP_IOMUXC_SD1_DATA7__GPIO2_IO09	0x00000106	// M.2 SDIO wakeup
 		>;
 	};
 
@@ -893,7 +891,7 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 
 	pinctrl_usbhub_spkamp: usbhubspkampgrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12             0x146    //HUB_RESET or AUDIO_AMP
+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12		0x146	//HUB_RESET or AUDIO_AMP
 		>;
 	};
 
@@ -913,10 +911,10 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3			0x1f
 			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL			0x1f
 			MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x1f
-            MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22          			0x19   //ENET RESET
-            MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21         0x00000106   //ENET INT
-			MX8MP_IOMUXC_GPIO1_IO08__ENET_QOS_1588_EVENT0_IN	0x106
-			MX8MP_IOMUXC_GPIO1_IO09__ENET_QOS_1588_EVENT0_OUT	0x106
+			MX8MP_IOMUXC_SAI2_RXC__GPIO4_IO22				0x19		//ENET RESET
+			MX8MP_IOMUXC_SAI2_RXFS__GPIO4_IO21				0x00000106	//ENET INT
+			MX8MP_IOMUXC_GPIO1_IO08__ENET_QOS_1588_EVENT0_IN		0x106
+			MX8MP_IOMUXC_GPIO1_IO09__ENET_QOS_1588_EVENT0_OUT		0x106
 		>;
 	};
 
@@ -936,19 +934,19 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 			MX8MP_IOMUXC_SAI1_TXD3__ENET1_RGMII_TD3		0x1f
 			MX8MP_IOMUXC_SAI1_TXD4__ENET1_RGMII_TX_CTL	0x1f
 			MX8MP_IOMUXC_SAI1_TXD5__ENET1_RGMII_TXC		0x1f
-            MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03         0x00000106   //ENET1 INT
-			MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02		0x19    //ENET1_RESET
-            MX8MP_IOMUXC_SAI1_RXC__ENET1_1588_EVENT0_OUT    0x00000106
-            MX8MP_IOMUXC_SAI1_RXFS__ENET1_1588_EVENT0_IN    0x00000106
+			MX8MP_IOMUXC_SAI1_RXD1__GPIO4_IO03		0x00000106	//ENET1 INT
+			MX8MP_IOMUXC_SAI1_RXD0__GPIO4_IO02		0x19		//ENET1_RESET
+			MX8MP_IOMUXC_SAI1_RXC__ENET1_1588_EVENT0_OUT	0x00000106
+			MX8MP_IOMUXC_SAI1_RXFS__ENET1_1588_EVENT0_IN	0x00000106
 		>;
 	};
 
-        pinctrl_flexcan1: flexcan1grp {
-                fsl,pins = <
-                        MX8MP_IOMUXC_SPDIF_RX__CAN1_RX         0x154
-                        MX8MP_IOMUXC_SPDIF_TX__CAN1_TX         0x154
-                >;
-        };
+	pinctrl_flexcan1: flexcan1grp {
+		fsl,pins = <
+			MX8MP_IOMUXC_SPDIF_RX__CAN1_RX		0x154
+			MX8MP_IOMUXC_SPDIF_TX__CAN1_TX		0x154
+		>;
+	};
 
 	pinctrl_ecspi2: ecspi2grp {
 		fsl,pins = <
@@ -1065,35 +1063,29 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 
 	pinctrl_usb0_pwr_en: usb0pwrengrp {
 		fsl,pins = <
-	        MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14     0x16
+			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14	0x16
 		>;
 	};
 
-	pinctrl_usb0_otg_id: usb0otgidgrp {
-		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x19
-		>;
-	};
-	
 	pinctrl_gpio1_hog: gpio1hoggrp {
 		fsl,pins = <
-	        MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01     0x19	// GPIO_USB_MUX_SEL(Need check boot status is high or low)
-	        MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x80	// USB1_OTG_ID
+			MX8MP_IOMUXC_GPIO1_IO01__GPIO1_IO01	0x19	// GPIO_USB_MUX_SEL(Need check boot status is high or low)
 		>;
 	};
 
 	pinctrl_gpio4_hog: gpio4hoggrp {
 		fsl,pins = <
-	        MX8MP_IOMUXC_SAI2_TXFS__GPIO4_IO24      0x19	// GPIO_COM1_MODE0
-	        MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25       0x19	// GPIO_COM1_MODE1
-	        MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28      0x80	// HWID_2
-	        MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29		0x80	// HWID_3
+			MX8MP_IOMUXC_SAI2_TXFS__GPIO4_IO24	0x19	// GPIO_COM1_MODE0
+			MX8MP_IOMUXC_SAI2_TXC__GPIO4_IO25	0x19	// GPIO_COM1_MODE1
+			MX8MP_IOMUXC_SAI3_RXFS__GPIO4_IO28	0x80	// HWID_2
+			MX8MP_IOMUXC_SAI3_RXC__GPIO4_IO29	0x80	// HWID_3
 		>;
 	};
 
-	pinctrl_usb1_oc: usb1ocgrp {
+	pinctrl_usb1_oc_otg_id: usb1ocotgidgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO15__USB2_OC		0x19
+			MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x19
 		>;
 	};
 
