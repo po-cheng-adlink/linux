@@ -607,6 +607,16 @@
 		VDDD-supply = <&reg_ex_audio_1v8>;
 		clocks = <&ex_audio_clk>;
 	};
+
+	eeprom@50 {
+		compatible = "atmel,24c256";
+		#address-cells = <1>;
+		#size-cells = <0>;
+		reg = <0x50>;
+		pagesize = <64>;
+		size = <32768>;
+		address-width = <16>;
+	};
 };
 
 &i2c6 {
