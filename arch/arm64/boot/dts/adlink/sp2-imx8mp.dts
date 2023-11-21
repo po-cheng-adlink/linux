@@ -1073,7 +1073,7 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 
 	pinctrl_hpdet: hpdetgrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20	0xC0
+			MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20	0x1C6
 		>;
 	};
 
