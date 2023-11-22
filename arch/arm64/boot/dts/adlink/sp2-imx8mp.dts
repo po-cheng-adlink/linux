@@ -103,6 +103,12 @@
 		};
 	};
 
+	extcon_usb0: extcon-usb-idvbus-grp0 {
+		compatible = "linux,extcon-usb-gpio";
+		id-gpio = <&gpio1 10 GPIO_ACTIVE_LOW>; /* GPIO1_IO10 */
+		// vbus-gpio = <&gpio1 15 GPIO_ACTIVE_LOW>; /* GPIO1_IO15 */
+	};
+
 	reg_usdhc2_vmmc: regulator-usdhc2 {
 		compatible = "regulator-fixed";
 		pinctrl-names = "default";
@@ -784,29 +790,19 @@
 };
 
 &usb_dwc3_0 {
-	dr_mode = "host";
-	status = "okay";
-};
-
-/* imx8mp-evk setting for OTG
-&usb_dwc3_0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&pinctrl_usb0_id>;
 	dr_mode = "otg";
+	// NOTE: don't set usb-role-switch to enable extcon
+	// (patch core.c to enable extcon fn in drd.c)
+	//usb-role-switch;
+	// NOTE: dual role, not real OTG for imx8mp, no host-negocitation or session-request
 	hnp-disable;
 	srp-disable;
-	adp-disable;
-	usb-role-switch;
-	role-switch-default-mode = "none";
-	snps,dis-u1-entry-quirk;
-	snps,dis-u2-entry-quirk;
+	extcon = <&extcon_usb0>;
+	otg-rev = <0x0200>;
 	status = "okay";
-
-	port {
-		usb3_drd_sw: endpoint {
-			remote-endpoint = <&typec_dr_sw>;
-		};
-	};
 };
-*/
 
 &usb3_phy1 {
 	fsl,phy-tx-preemp-amp-tune = <3>;
@@ -819,8 +815,6 @@
 };
 
 &usb_dwc3_1 {
-	pinctrl-names = "default";
-	//pinctrl-0 = <&pinctrl_usb1_vbus>;
 	dr_mode = "host";
 	status = "okay";
 };
@@ -1104,18 +1098,25 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 
-	pinctrl_usb1_oc_otg_id: usb1ocotgidgrp {
+	pinctrl_usb0_id: usb0-id-grp {
 		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO15__USB2_OC		0x19
-			MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x19
+			// MX8MP_IOMUXC_GPIO1_IO10__USB1_ID		0x19 // DNU - do not use
+			MX8MP_IOMUXC_GPIO1_IO10__GPIO1_IO10		0x19
 		>;
 	};
 
-	pinctrl_usb2_oc: usb2ocgrp {
+	pinctrl_usb0_oc: usb0-oc-grp {
 		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO13__USB1_OC		0x19
+			// MX8MP_IOMUXC_GPIO1_IO15__USB2_OC		0x19
+			MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15		0x19
 		>;
 	};
+
+//	pinctrl_usb1_oc: usb1ocgrp {
+//		fsl,pins = <
+//			MX8MP_IOMUXC_GPIO1_IO13__USB1_OC		0x19
+//		>;
+//	};
 
 	pinctrl_uart1: uart1grp {
 		fsl,pins = <
