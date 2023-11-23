@@ -90,7 +90,8 @@ static int dwc3_get_dr_mode(struct dwc3 *dwc)
 		    (!IS_ENABLED(CONFIG_USB_ROLE_SWITCH) ||
 		     !device_property_read_bool(dwc->dev, "usb-role-switch")) &&
 		    !DWC3_VER_IS_PRIOR(DWC3, 330A))
-			mode = USB_DR_MODE_PERIPHERAL;
+		    /* imx8mp: allow for dual role with no usb-role-switch in dts */
+		    mode = DWC3_VER_IS(DWC3, 330B) ? USB_DR_MODE_OTG : USB_DR_MODE_PERIPHERAL;
 	}
 
 	if (mode != dwc->dr_mode) {
