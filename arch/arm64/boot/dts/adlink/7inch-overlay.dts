@@ -22,14 +22,14 @@
 		target-path = "/";
 		__overlay__ {
 			lvds0_panel {
-				compatible = "hannstar,hsd070ifw1", "panel-simple";
+				compatible = "am,1024600DTZQW", "panel-lvds";
 
 				height-mm = <86>;
 				width-mm = <154>;
 
 				status = "okay";
 
-				display-timing {
+				panel-timing {
 					clock-frequency = <51200000>;
 					hactive = <1024>;
 					vactive = <600>;
