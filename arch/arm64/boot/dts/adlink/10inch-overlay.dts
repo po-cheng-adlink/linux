@@ -22,7 +22,7 @@
 		target-path = "/";
 		__overlay__ {
 			lvds0_panel {
-				compatible = "amp,am1280800d", "panel-lvds";
+				compatible = "am,am1280800wutzqw", "panel-lvds";
 
 				height-mm = <135>;
 				width-mm = <217>;
