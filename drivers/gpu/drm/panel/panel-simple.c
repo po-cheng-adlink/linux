@@ -679,7 +679,7 @@ static int panel_simple_parse_dt_settings (struct device *dev, struct panel_simp
 {
 	struct device_node *np = dev->of_node;
 	struct panel_desc *pd = (struct panel_desc *)desc;
-	int ret = 0;
+	int ret = 0; /* return -1 to warn override */
 
 	/* if other panel node attributes exists, parse them from device tree, and force override */
 	if (of_property_read_bool(np, "panel-width-mm")) {
@@ -688,6 +688,31 @@ static int panel_simple_parse_dt_settings (struct device *dev, struct panel_simp
 	}
 	if (of_property_read_bool(np, "panel-height-mm")) {
 		of_property_read_u32(np, "panel-height-mm", &pd->size.height);
+		ret = -1;
+	}
+	/* optional delays */
+	if (of_property_read_bool(np, "delay-prepare")) {
+		of_property_read_u32(np, "delay-prepare", &pd->delay.prepare);
+		ret = -1;
+	}
+	if (of_property_read_bool(np, "delay-hpd-absent")) {
+		of_property_read_u32(np, "delay-hpd-absent", &pd->delay.hpd_absent_delay);
+		ret = -1;
+	}
+	if (of_property_read_bool(np, "delay-prepare-to-enable")) {
+		of_property_read_u32(np, "delay-prepare-to-enable", &pd->delay.prepare_to_enable);
+		ret = -1;
+	}
+	if (of_property_read_bool(np, "delay-enable")) {
+		of_property_read_u32(np, "delay-enable", &pd->delay.enable);
+		ret = -1;
+	}
+	if (of_property_read_bool(np, "delay-disable")) {
+		of_property_read_u32(np, "delay-disable", &pd->delay.disable);
+		ret = -1;
+	}
+	if (of_property_read_bool(np, "delay-unprepare")) {
+		of_property_read_u32(np, "delay-disable", &pd->delay.unprepare);
 		ret = -1;
 	}
 	if (of_property_read_bool(np, "refresh-rate")) {
@@ -2489,8 +2514,6 @@ static const struct panel_desc hannstar_hsd070ifw1 = {
 	.delay = {
 		.prepare = 10,
 		.enable = 100,
-		.disable = 100,
-		.unprepare = 800,
 	},
 	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
 	.connector_type = DRM_MODE_CONNECTOR_LVDS,
