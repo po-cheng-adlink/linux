@@ -13,6 +13,9 @@
 		target-path = "/";
 		__overlay__ {
 			lvds_backlight {
+				pre-pwm-on-delay-ms = <200>;
+				pwm-on-delay-ms = <25>;
+				post-pwm-on-delay-ms = <10>;
 				status = "okay";
 			};
 		};
@@ -26,6 +29,8 @@
 
 				height-mm = <135>;
 				width-mm = <217>;
+
+				post-prepare-delay-ms = <30>;
 
 				status = "okay";
 

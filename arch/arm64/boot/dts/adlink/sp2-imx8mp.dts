@@ -42,38 +42,14 @@
 		clock-frequency = <25000000>;
 	};
 
-	reg_bl_en: regulator-bl-en {
+	reg_lvds_blpwr: regulator-lvds-pwr {
 		compatible = "regulator-fixed";
 		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_reg_bl_en>;
-		regulator-name = "bl-en";
-		regulator-min-microvolt = <1800000>;
-		regulator-max-microvolt = <1800000>;
-		gpio = <&gpio1 0 GPIO_ACTIVE_HIGH>;
-		enable-active-high;
-		regulator-always-on;
-	};
-
-	reg_bl_pwr: regulator-bl-pwr {
-		compatible = "regulator-fixed";
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_reg_bl_pwr>;
-		regulator-name = "bl-pwr";
+		pinctrl-0 = <&pinctrl_reg_lvds_bl_pwr>;
+		regulator-name = "vdd";
 		regulator-min-microvolt = <1800000>;
 		regulator-max-microvolt = <1800000>;
 		gpio = <&gpio3 20 GPIO_ACTIVE_HIGH>;
-		enable-active-high;
-		regulator-always-on;
-	};
-
-	reg_lvds_vdd_en: regulator-lvds-vdd-en {
-		compatible = "regulator-fixed";
-		pinctrl-names = "default";
-		pinctrl-0 = <&pinctrl_reg_lvds_vdd_en>;
-		regulator-name = "lvds-vdd-en";
-		regulator-min-microvolt = <1800000>;
-		regulator-max-microvolt = <1800000>;
-		gpio = <&gpio4 27 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 	};
 
@@ -189,6 +165,10 @@
 
 	lvds_backlight: lvds_backlight {
 		compatible = "pwm-backlight";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_bl_en>;
+		enable-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+		power-supply = <&reg_lvds_blpwr>;
 		pwms = <&pwm2 0 100000 0>;
 		status = "disabled";
 
@@ -208,7 +188,9 @@
 
 	lvds0_panel {
 		backlight = <&lvds_backlight>;
-		power-supply = <&reg_lvds_vdd_en>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_lvds_vdd>;
+		enable-gpios = <&gpio4 27 GPIO_ACTIVE_HIGH>;
 
 		data-mapping = "vesa-24";
 		status = "disabled";
@@ -1019,15 +1001,15 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 
-	pinctrl_reg_bl_pwr: regblpwrgrp {
+	pinctrl_reg_lvds_vdd: reglvdsvddgrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_SAI5_RXC__GPIO3_IO20	0x16
+			MX8MP_IOMUXC_SAI2_MCLK__GPIO4_IO27	0x16
 		>;
 	};
 
-	pinctrl_reg_lvds_vdd_en: reglvdsvddengrp {
+	pinctrl_reg_lvds_bl_pwr: reglvdsblpwrgrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_SAI2_MCLK__GPIO4_IO27	0x16
+			MX8MP_IOMUXC_SAI5_RXC__GPIO3_IO20	0x106
 		>;
 	};
 
