@@ -16,6 +16,8 @@
 				pre-pwm-on-delay-ms = <200>;
 				pwm-on-delay-ms = <25>;
 				post-pwm-on-delay-ms = <10>;
+				pwm-off-delay-ms = <10>;
+				post-pwm-off-delay-ms = <10>;
 				status = "okay";
 			};
 		};
@@ -31,6 +33,9 @@
 				width-mm = <217>;
 
 				post-prepare-delay-ms = <30>;
+				pre-disable-delay-ms = <200>;
+				disable-delay-ms = <20>;
+				post-unprepare-delay-ms = <500>;
 
 				status = "okay";
 
