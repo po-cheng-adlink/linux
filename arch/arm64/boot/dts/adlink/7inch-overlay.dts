@@ -13,11 +13,12 @@
 		target-path = "/";
 		__overlay__ {
 			lvds_backlight {
-				pre-pwm-on-delay-ms = <140>;
+				pre-pwm-on-delay-ms = <160>;
 				pwm-on-delay-ms = <25>;
 				post-pwm-on-delay-ms = <10>;
 				pwm-off-delay-ms = <10>;
-				post-pwm-off-delay-ms = <10>;
+				post-pwm-off-delay-ms = <110>;
+				skip-blpwr-off;
 				status = "okay";
 			};
 		};
@@ -33,7 +34,11 @@
 				width-mm = <154>;
 
 				post-prepare-delay-ms = <30>;
+				pre-disable-delay-ms = <15>;
 				post-unprepare-delay-ms = <1000>;
+
+				power-supply = <&reg_lvds_blpwr>;
+				skip-blpwr-off;
 
 				status = "okay";
 
