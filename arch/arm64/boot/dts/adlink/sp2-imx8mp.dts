@@ -232,19 +232,11 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_gpio1_hog>;
 
-/*
 	gpio-line-names =       \
 		"", "USB_MUX_SEL", "", "", "", "", "", "",  \
 		"", "", "", "", "", "", "", "",      \
 		"", "", "", "", "", "", "", "", \
 		"", "", "", "", "", "", "", "";
-*/
-	usb_mux_sel {
-		gpio-hog;
-		gpios = <1 GPIO_ACTIVE_HIGH>;
-		output-high;
-		line-name = "USB_MUX_SEL";
-	};
 };
 
 &gpio4 {
