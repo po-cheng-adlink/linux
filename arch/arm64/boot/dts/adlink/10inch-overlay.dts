@@ -64,6 +64,13 @@
 	};
 
 	fragment@3 {
+		target = <&lcdif2>;
+		__overlay__ {
+			status = "okay";
+		};
+	};
+
+	fragment@4 {
 		target = <&ldb_phy>;
 		__overlay__ {
 			status = "okay";

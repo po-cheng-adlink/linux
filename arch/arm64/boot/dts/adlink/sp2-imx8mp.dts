@@ -662,7 +662,7 @@
 };
 
 &lcdif2 {
-	status = "okay";
+	status = "disabled";
 };
 
 &lcdif3 {
