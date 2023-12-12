@@ -1365,6 +1365,9 @@ sec_mipi_dsim_bridge_atomic_enable(struct drm_bridge *bridge,
 	/* initialize FIFO pointers */
 	sec_mipi_dsim_init_fifo_pointers(dsim);
 
+	/* config esc clock, byte clock and etc */
+	sec_mipi_dsim_config_clkctrl(dsim);
+
 	/* prepare panel if exists */
 	if (dsim->panel) {
 		ret = drm_panel_prepare(dsim->panel);
@@ -1373,9 +1376,6 @@ sec_mipi_dsim_bridge_atomic_enable(struct drm_bridge *bridge,
 			return;
 		}
 	}
-
-	/* config esc clock, byte clock and etc */
-	sec_mipi_dsim_config_clkctrl(dsim);
 
 	/* enable panel if exists */
 	if (dsim->panel) {
