@@ -516,6 +516,7 @@
 	status = "okay";
 };
 
+/*
 &ecspi2 {
 	#address-cells = <1>;
 	#size-cells = <0>;
@@ -531,6 +532,7 @@
 		spi-max-frequency = <500000>;
 	};
 };
+*/
 
 &i2c2 {
 	clock-frequency = <100000>;
@@ -931,6 +933,7 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 		>;
 	};
 
+/*
 	pinctrl_ecspi2: ecspi2grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK		0x82
@@ -944,6 +947,7 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13		0x40000
 		>;
 	};
+*/
 
 
 	pinctrl_gpio_led: gpioledgrp {
@@ -1118,8 +1122,8 @@ fsl,pins = <PIN_FUNC_ID CONFIG>,
 
     pinctrl_uart4: uart4grp {
         fsl,pins = <
-			MX8MP_IOMUXC_UART4_RXD__UART4_DCE_RX		0x140
-			MX8MP_IOMUXC_UART4_TXD__UART4_DCE_TX		0x140
+			MX8MP_IOMUXC_NAND_DATA00__UART4_DCE_RX		0x140
+			MX8MP_IOMUXC_NAND_DATA01__UART4_DCE_TX		0x140
 			MX8MP_IOMUXC_NAND_DATA02__UART4_DCE_CTS		0x140
 			MX8MP_IOMUXC_NAND_DATA03__UART4_DCE_RTS		0x140
         >;
