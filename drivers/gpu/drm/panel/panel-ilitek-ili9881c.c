@@ -640,6 +640,10 @@ static const struct ili9881c_instr am_8001280gtzqw_init[] = {
 	ILI9881C_COMMAND_INSTR(0xD1, 0x62),
 	ILI9881C_COMMAND_INSTR(0xD2, 0x6A),
 	ILI9881C_COMMAND_INSTR(0xD3, 0x31),
+	ILI9881C_SWITCH_PAGE_INSTR(0),
+	ILI9881C_COMMAND_INSTR(0x51, 0x0F),
+	ILI9881C_COMMAND_INSTR(0x53, 0x2C),
+	ILI9881C_COMMAND_INSTR(0x35, 0x00),
 };
 
 static inline struct ili9881c *panel_to_ili9881c(struct drm_panel *panel)
@@ -844,6 +848,7 @@ static int ili9881c_dsi_probe(struct mipi_dsi_device *dsi)
 	struct ili9881c *ctx;
 	int ret;
 	u32 mode_flags;
+	u32 format;
 
 	ctx = devm_kzalloc(&dsi->dev, sizeof(*ctx), GFP_KERNEL);
 	if (!ctx)
@@ -878,9 +883,17 @@ static int ili9881c_dsi_probe(struct mipi_dsi_device *dsi)
 		if (ret)
 			return ret;
 	}
-
 	dsi->mode_flags = ctx->desc->mode_flags | mode_flags;
-	dsi->format = MIPI_DSI_FMT_RGB888;
+
+	/* enum mipi_dsi_pixel_format { MIPI_DSI_FMT_RGB888, MIPI_DSI_FMT_RGB666, MIPI_DSI_FMT_RGB666_PACKED, MIPI_DSI_FMT_RGB565, }; */
+	if (of_property_read_bool((&dsi->dev)->of_node, "dsi-format")) {
+		ret = of_property_read_u32((&dsi->dev)->of_node, "dsi-format", &format);
+		if (ret)
+			return ret;
+		dsi->format = format;
+	} else {
+		dsi->format = MIPI_DSI_FMT_RGB888;
+	}
 	dsi->lanes = 4;
 
 	return mipi_dsi_attach(dsi);
