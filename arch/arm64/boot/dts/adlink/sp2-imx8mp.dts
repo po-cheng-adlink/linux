@@ -172,7 +172,7 @@
 	};
 
 	lvds0_panel {
-		compatible = "amp,am1024600d", "panel-lvds";
+		compatible = "hannstar,hsd070ifw1";
 		backlight = <&lvds_backlight>;
 		power-supply = <&reg_lvds_vdd_en>;
 
@@ -180,7 +180,7 @@
 		height-mm = <86>;
 		width-mm = <154>;
 
-		panel-timing {
+		display-timing {
 			clock-frequency = <51200000>;
 			hactive = <1024>;
 			vactive = <600>;
