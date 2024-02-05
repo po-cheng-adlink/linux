@@ -100,21 +100,21 @@
 		enable-active-high;
 	};
 
-   reg_ex_auido_3v: regulator-ex-audio-3v {
-       compatible = "regulator-fixed";
-       regulator-name = "ex-audio-3V";
-       regulator-min-microvolt = <3300000>;
-       regulator-max-microvolt = <3300000>;
-       regulator-always-on;
-   };
+	reg_ex_audio_3v: regulator-ex-audio-3v {
+		compatible = "regulator-fixed";
+		regulator-name = "ex-audio-3V";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		regulator-always-on;
+	};
 
-   reg_ex_auido_1v8: regulatorex-audio-1v8 {
-       compatible = "regulator-fixed";
-       regulator-name = "+V1.8";
-       regulator-min-microvolt = <1800000>;
-       regulator-max-microvolt = <1800000>;
-       regulator-always-on;
-   };
+	reg_ex_audio_1v8: regulatorex-audio-1v8 {
+		compatible = "regulator-fixed";
+		regulator-name = "+V1.8";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		regulator-always-on;
+	};
 
 	ex_audio_clk: sgtl5000_19M {
 		compatible = "fixed-clock";
@@ -148,8 +148,8 @@
 			"Mic Jack", "Mic Bias",
 			"Headphone Jack", "HP_OUT",
 			"Line Out Jack", "LINE_OUT";
-		mux-int-port = <1>;
-		mux-ext-port = <3>;
+		/* mux-int-port = <1>; */
+		/* mux-ext-port = <3>; */
 	};
 
 	lvds_backlight: lvds_backlight {
@@ -571,9 +571,9 @@
 		#sound-dai-cells = <0>;
 		reg = <0x0a>;
 		micbias-voltage-m-volts = <2250>;
-		VDDA-supply = <&reg_ex_auido_3v>;
-		VDDIO-supply = <&reg_ex_auido_3v>;
-		VDDD-supply = <&reg_ex_auido_1v8>;
+		VDDA-supply = <&reg_ex_audio_3v>;
+		VDDIO-supply = <&reg_ex_audio_1v8>;
+		VDDD-supply = <&reg_ex_audio_1v8>;
 		clocks = <&ex_audio_clk>;
 	};
 };
