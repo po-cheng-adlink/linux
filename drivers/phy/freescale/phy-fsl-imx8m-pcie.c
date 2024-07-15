@@ -179,7 +179,7 @@ static int imx8_pcie_phy_power_on(struct phy *phy)
 	 * Fine tune the parameters of the PHY, let PCIe link up to Gen3
 	 * between two i.MX8MP EVK boards in the EP/RC validation system.
 	 */
-	if (imx8_pcie_phy_tuned && (imx8_phy->drvdata->variant == IMX8MP)) {
+	if (imx8_pcie_phy_tuned == 1 && (imx8_phy->drvdata->variant == IMX8MP)) {
 		writel(LN0_OVRD_TX_DRV_LVL_G1,
 		       imx8_phy->base + IMX8MP_PCIE_PHY_TRSV_REG001);
 		writel(LN0_OVRD_TX_DRV_LVL_G2,
@@ -214,6 +214,9 @@ static int imx8_pcie_phy_power_on(struct phy *phy)
 		       imx8_phy->base + IMX8MP_PCIE_PHY_TRSV_REG159);
 		writel(LN0_TG_RX_SIGVAL_LBF_DELAY,
 		       imx8_phy->base + IMX8MP_PCIE_PHY_TRSV_REG206);
+	} else if (imx8_pcie_phy_tuned == 2 && (imx8_phy->drvdata->variant == IMX8MP)) {
+		writel(0x25,
+		       imx8_phy->base + IMX8MP_PCIE_PHY_TRSV_REG001);
 	}
 
 	/* Do the PHY common block reset */
@@ -282,6 +285,10 @@ static int __init imx8_pcie_phy_fine_tune(char *str)
 	if (!strcmp(str, "yes")) {
 		pr_info("i.MX PCIe PHY is fine tuned in EP/RC SYS.\n");
 		imx8_pcie_phy_tuned = 1;
+	}
+	if (!strcmp(str, "adlink")) {
+		pr_info("i.MX PCIe PHY is fine tuned by ADLINK.\n");
+		imx8_pcie_phy_tuned = 2;
 	}
 	return 1;
 }
