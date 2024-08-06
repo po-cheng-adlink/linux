@@ -68,8 +68,12 @@ static int panel_lvds_unprepare(struct drm_panel *panel)
 	if (lvds->disable_delay)
 		msleep(lvds->disable_delay);
 
-	if (lvds->supply)
-		regulator_disable(lvds->supply);
+	/* if skip_blpwr_off is set, then don't disable supply. Leave it for blpwm to disable.
+	   NOTE: supply regulator must be the same regulator as the blpwm power-supply */
+	if (!lvds->skip_blpwr_off) {
+		if (lvds->supply)
+			regulator_disable(lvds->supply);
+	}
 
 	if (lvds->post_unprepare_delay)
 		msleep(lvds->post_unprepare_delay);
