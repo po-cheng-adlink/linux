@@ -291,7 +291,7 @@ static int tpm_tis_i2c_verify_crc(struct tpm_tis_data *data, size_t len,
  *
  * See TCG PC Client PTP Specification v1.04, 8.1.10 GUARD_TIME
  */
-static int tpm_tis_i2c_init_guard_time(struct tpm_tis_i2c_phy *phy)
+static int tpm_tis_i2c_init_guard_time(struct tpm_tis_i2c_phy *phy, bool default_guard_time)
 {
 	u32 i2c_caps;
 	int ret;
@@ -300,6 +300,8 @@ static int tpm_tis_i2c_init_guard_time(struct tpm_tis_i2c_phy *phy)
 	phy->guard_time_write = true;
 	phy->guard_time_min = GUARD_TIME_DEFAULT_MIN;
 	phy->guard_time_max = GUARD_TIME_DEFAULT_MAX;
+
+	if (default_guard_time)	return 0;
 
 	ret = tpm_tis_i2c_read_bytes(&phy->priv, TPM_I2C_INTERFACE_CAPABILITY,
 				     sizeof(i2c_caps), (u8 *)&i2c_caps,
@@ -329,9 +331,11 @@ static const struct tpm_tis_phy_ops tpm_i2c_phy_ops = {
 
 static int tpm_tis_i2c_probe(struct i2c_client *dev)
 {
+	struct device *bdev = &dev->dev;
 	struct tpm_tis_i2c_phy *phy;
 	const u8 crc_enable = 1;
 	const u8 locality = 0;
+	bool default_guard_time = false;
 	int ret;
 
 	phy = devm_kzalloc(&dev->dev, sizeof(struct tpm_tis_i2c_phy),
@@ -346,8 +350,11 @@ static int tpm_tis_i2c_probe(struct i2c_client *dev)
 	set_bit(TPM_TIS_DEFAULT_CANCELLATION, &phy->priv.flags);
 	phy->i2c_client = dev;
 
+	default_guard_time = of_property_read_bool(bdev->of_node, "default-guard-time");
+	if (default_guard_time)
+		pr_info("tpm: use default guard time\n");
 	/* must precede all communication with the tpm */
-	ret = tpm_tis_i2c_init_guard_time(phy);
+	ret = tpm_tis_i2c_init_guard_time(phy, default_guard_time);
 	if (ret)
 		return ret;
 
@@ -383,6 +390,7 @@ MODULE_DEVICE_TABLE(i2c, tpm_tis_i2c_id);
 #ifdef CONFIG_OF
 static const struct of_device_id of_tis_i2c_match[] = {
 	{ .compatible = "infineon,slb9673", },
+	{ .compatible = "st,st33htpm-i2c", },
 	{}
 };
 MODULE_DEVICE_TABLE(of, of_tis_i2c_match);
