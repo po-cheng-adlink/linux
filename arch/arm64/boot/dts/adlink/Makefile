@@ -13,6 +13,7 @@ dtbo-$(CONFIG_ARCH_MXC) += eth1-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += cma400mb-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += cma750mb-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += cma950mb-overlay.dtbo
+dtbo-$(CONFIG_ARCH_MXC) += 23inch-overlay.dtbo
 
 # enable creation of __symbols__ node
 DTC_FLAGS += -@
