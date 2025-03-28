@@ -3,6 +3,7 @@
 
 dtb-$(CONFIG_ARCH_MXC) += sp2-imx8mp.dtb
 dtbo-$(CONFIG_ARCH_MXC) += 10inch-overlay.dtbo
+dtbo-$(CONFIG_ARCH_MXC) += 10auo-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += 7inch-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += 7dsi-overlay.dtbo
 dtbo-$(CONFIG_ARCH_MXC) += awcm276masur-overlay.dtbo
