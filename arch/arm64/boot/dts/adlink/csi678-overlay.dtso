@@ -79,7 +79,11 @@
 	fragment@3 {
 		target = <&isi_0>;
 		__overlay__ {
-			status = "disabled";
+			status = "okay";
+			dma-coherent;
+			cap_device {
+				status = "okay";
+			};
 		};
 	};
 
