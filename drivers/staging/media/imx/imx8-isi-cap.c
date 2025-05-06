@@ -54,6 +54,20 @@ struct mxc_isi_fmt mxc_isi_src_formats[] = {
 		.memplanes	= 1,
 		.colplanes	= 1,
 		.align		= 2,
+	}, {
+		.name		= "RG10 (SRGGB10)",
+		.fourcc		= V4L2_PIX_FMT_SRGGB10,
+		.depth		= { 16 },
+		.memplanes	= 1,
+		.colplanes	= 1,
+		.align		= 2,
+	}, {
+		.name		= "RG12 (SRGGB12)",
+		.fourcc		= V4L2_PIX_FMT_SRGGB12,
+		.depth		= { 16 },
+		.memplanes	= 1,
+		.colplanes	= 1,
+		.align		= 2,
 	}
 };
 
@@ -100,6 +114,17 @@ struct mxc_isi_fmt *mxc_isi_get_src_fmt(struct v4l2_subdev_format *sd_fmt)
 	    sd_fmt->format.code == MEDIA_BUS_FMT_UYVY8_1X16||
 	    sd_fmt->format.code == MEDIA_BUS_FMT_YUYV8_2X8)
 		index = 1;
+	/* additional fmt for Bayer RAW10 and RAW12 */
+	else if (sd_fmt->format.code == MEDIA_BUS_FMT_SBGGR10_1X10 ||
+	         sd_fmt->format.code == MEDIA_BUS_FMT_SGBRG10_1X10 ||
+	         sd_fmt->format.code == MEDIA_BUS_FMT_SGRBG10_1X10 ||
+	         sd_fmt->format.code == MEDIA_BUS_FMT_SRGGB10_1X10)
+	    index = 2;
+	else if (sd_fmt->format.code == MEDIA_BUS_FMT_SBGGR12_1X12 ||
+	         sd_fmt->format.code == MEDIA_BUS_FMT_SGBRG12_1X12 ||
+	         sd_fmt->format.code == MEDIA_BUS_FMT_SGBRG12_1X12 ||
+	         sd_fmt->format.code == MEDIA_BUS_FMT_SRGGB12_1X12)
+	    index = 3;
 	else
 		index = 0;
 	return &mxc_isi_src_formats[index];
