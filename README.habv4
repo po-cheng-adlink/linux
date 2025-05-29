@@ -1,0 +1,45 @@
+To sign your kernel image (Image) manually, make use of install_image_imx8.sh script
+
+1. Build your kernel image normally.
+
+1.1 Fetch the kernel source
+
+# git clone https://github.com/ADLINK/linux.git -b lf-6.6.y/sp2-imx8mp
+
+1.2 build kernel image
+
+# make adlink_sp2imx8mp_defconfig
+# make
+
+After successful build, the unsigned kernel image is located at arch/arm64/boot/Image
+
+2 run ./install_image_imx8.sh script to generate signed Image
+
+2.1 clean the build directory
+
+# ./install_image_imx8.sh -c
+
+2.2 build signing tools and sign Image
+
+# ./install_image_imx8.sh -m sp2imx8mp
+
+NOTE: You may need to install extra library packages to successfully build all
+      the required components. i.e. cst
+
+2.3 to re-use your existing PKI keys/crts to sign flash.bin.
+
+# rm -fr build_fw_imx8/release/keys/*
+# rm -fr build_fw_imx8/release/crts/*
+# cp -fr <YOUR KEYS>/* build_fw_imx8/release/keys/
+# cp -fr <YOUR CRTS>/* build_fw_imx8/release/crts/
+
+remove the previous signed Image
+
+# rm -fr build_fw_imx8/Image* build_fw_imx8/ivt*
+
+then run the script again
+
+# ./install_image_imx8.sh -m sp2imx8mp
+
+The signed kernel image is located at build_fw_imx8/Image.signed
+
