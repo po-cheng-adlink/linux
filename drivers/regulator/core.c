@@ -6230,7 +6230,7 @@ static int regulator_late_cleanup(struct device *dev, void *data)
 		/* We log since this may kill the system if it goes
 		 * wrong.
 		 */
-		rdev_info(rdev, "disabling\n");
+		rdev_info(rdev, "%s: disabling\n", __func__);
 		ret = _regulator_do_disable(rdev);
 		if (ret != 0)
 			rdev_err(rdev, "couldn't disable: %pe\n", ERR_PTR(ret));

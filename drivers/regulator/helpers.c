@@ -59,6 +59,7 @@ EXPORT_SYMBOL_GPL(regulator_is_enabled_regmap);
  */
 int regulator_enable_regmap(struct regulator_dev *rdev)
 {
+	rdev_info(rdev, "%s\n", __func__);
 	unsigned int val;
 
 	if (rdev->desc->enable_is_inverted) {
@@ -85,6 +86,7 @@ EXPORT_SYMBOL_GPL(regulator_enable_regmap);
  */
 int regulator_disable_regmap(struct regulator_dev *rdev)
 {
+	rdev_info(rdev, "%s\n", __func__);
 	unsigned int val;
 
 	if (rdev->desc->enable_is_inverted) {
